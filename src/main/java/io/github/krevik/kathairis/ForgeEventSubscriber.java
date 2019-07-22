@@ -1,34 +1,7 @@
 package io.github.krevik.kathairis;
 
-import com.google.common.collect.ImmutableList;
-import io.github.krevik.kathairis.client.ModBlocksColorHandler;
-import io.github.krevik.kathairis.init.ModBiomes;
-import io.github.krevik.kathairis.init.ModParticles;
-import io.github.krevik.kathairis.util.ModUtil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.stream.Collectors;
-
-import static io.github.krevik.kathairis.Kathairis.KATHAIRIS_LOG;
 import static io.github.krevik.kathairis.util.ModReference.MOD_ID;
 import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.FORGE;
 

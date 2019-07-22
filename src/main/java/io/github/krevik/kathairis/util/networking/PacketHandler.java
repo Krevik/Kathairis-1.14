@@ -1,6 +1,8 @@
 package io.github.krevik.kathairis.util.networking;
 
-import io.github.krevik.kathairis.util.networking.packets.*;
+import io.github.krevik.kathairis.util.networking.packets.PacketClientOpenGuiOldMan;
+import io.github.krevik.kathairis.util.networking.packets.PacketServerGivePlayerEthereal;
+import io.github.krevik.kathairis.util.networking.packets.PacketServerPlayerUseJadeVine;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.FakePlayer;

@@ -1,12 +1,9 @@
 package io.github.krevik.kathairis.init;
 
-import io.github.krevik.kathairis.particle.*;
-import net.minecraft.client.Minecraft;
+import io.github.krevik.kathairis.particle.BasicKatharianParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static io.github.krevik.kathairis.util.ModReference.MOD_ID;
 

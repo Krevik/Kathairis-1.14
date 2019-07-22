@@ -5,7 +5,6 @@ import io.github.krevik.kathairis.init.ModBiomes;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.gen.IContext;
 import net.minecraft.world.gen.OverworldGenSettings;
-import net.minecraft.world.gen.layer.GenLayerBiome;
 import net.minecraft.world.gen.layer.traits.IC0Transformer;
 import net.minecraftforge.common.BiomeManager;
 

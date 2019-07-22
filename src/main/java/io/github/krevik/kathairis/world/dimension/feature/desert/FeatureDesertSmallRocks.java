@@ -1,6 +1,5 @@
 package io.github.krevik.kathairis.world.dimension.feature.desert;
 
-import io.github.krevik.kathairis.block.BlockBrinePustule;
 import io.github.krevik.kathairis.block.BlockPurplePalm;
 import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.block.state.IBlockState;

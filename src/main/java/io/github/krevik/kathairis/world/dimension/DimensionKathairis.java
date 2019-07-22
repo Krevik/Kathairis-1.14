@@ -5,17 +5,13 @@ import io.github.krevik.kathairis.Kathairis;
 import io.github.krevik.kathairis.client.render.world.RenderKathairisSky;
 import io.github.krevik.kathairis.init.ModBiomes;
 import io.github.krevik.kathairis.init.ModBlocks;
-import io.github.krevik.kathairis.init.ModDimensions;
 import io.github.krevik.kathairis.world.dimension.biome.KatharianBiomeProvider;
 import io.github.krevik.kathairis.world.dimension.biome.KatharianBiomeProviderSettings;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -25,19 +21,16 @@ import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.biome.provider.BiomeProviderType;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.OverworldDimension;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.ChunkGeneratorType;
-import net.minecraft.world.gen.IChunkGenSettings;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.common.DimensionManager;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-
-import static io.github.krevik.kathairis.util.ModReference.MOD_ID;
 
 public class DimensionKathairis extends OverworldDimension {
 
@@ -51,7 +44,7 @@ public class DimensionKathairis extends OverworldDimension {
     }
 
     @Override
-    public IChunkGenerator<? extends IChunkGenSettings> createChunkGenerator() {
+    public ChunkGenerator<? extends GenerationSettings> createChunkGenerator() {
         WorldType worldtype = this.world.getWorldInfo().getGenerator();
         BiomeProviderType<KatharianBiomeProviderSettings, KatharianBiomeProvider> biomeprovidertype1 = new BiomeProviderType<>(KatharianBiomeProvider::new,KatharianBiomeProviderSettings::new,new ResourceLocation("kathairis","katharian_biome_provider_type"));
         KatharianBiomeProviderSettings overworldbiomeprovidersettings1 = biomeprovidertype1.createSettings().setGeneratorSettings(new KathairisGenSettings()).setWorldInfo(this.world.getWorldInfo());
@@ -77,6 +70,7 @@ public class DimensionKathairis extends OverworldDimension {
     }
 
     Vec3d swampColor = new Vec3d(14/10,51/10,12/10);
+
     @Override
     public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
         int radius=6;
@@ -104,7 +98,7 @@ public class DimensionKathairis extends OverworldDimension {
     @Override
     @OnlyIn(Dist.CLIENT)
     public Vec3d getFogColor(float float1, float float2) {
-        EntityPlayer player = Minecraft.getInstance().player;
+        PlayerEntity player = Minecraft.getInstance().player;
         int radius=6;
         ArrayList<BlockPos> posesToCalculate = new ArrayList<>();
 

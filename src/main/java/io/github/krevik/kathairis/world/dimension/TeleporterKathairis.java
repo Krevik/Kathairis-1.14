@@ -4,19 +4,20 @@ import io.github.krevik.kathairis.block.BlockKathairisPortal;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -28,11 +29,11 @@ import static io.github.krevik.kathairis.init.ModBlocks.KATHAIRIS_PORTAL;
  */
 public class TeleporterKathairis extends Teleporter {
 
-	protected final WorldServer world;
+	protected final ServerWorld world;
 	protected final Random random;
 	protected final Long2ObjectMap<PortalPosition> destinationCoordinateCache = new Long2ObjectOpenHashMap<>(4096);
 
-	public TeleporterKathairis(WorldServer worldIn) {
+	public TeleporterKathairis(ServerWorld worldIn) {
 		super(worldIn);
 		this.world = worldIn;
 		this.random = new Random(worldIn.getSeed());
@@ -64,9 +65,7 @@ public class TeleporterKathairis extends Teleporter {
 			}
 
 			entityIn.setLocationAndAngles((double) i, (double) j, (double) k, entityIn.rotationYaw, 0.0F);
-			entityIn.motionX = 0.0D;
-			entityIn.motionY = 0.0D;
-			entityIn.motionZ = 0.0D;
+			entityIn.setMotion(new Vec3d(0.0D,0.0D,0.0D));
 		}
 	}
 
@@ -76,7 +75,7 @@ public class TeleporterKathairis extends Teleporter {
 		int j = MathHelper.floor(entityIn.posX);
 		int k = MathHelper.floor(entityIn.posZ);
 		boolean flag = true;
-		BlockPos blockpos = BlockPos.ORIGIN;
+		BlockPos blockpos = BlockPos.ZERO;
 		long l = ChunkPos.asLong(j, k);
 		if (this.destinationCoordinateCache.containsKey(l)) {
 			PortalPosition teleporter$portalposition = this.destinationCoordinateCache.get(l);
@@ -147,8 +146,8 @@ public class TeleporterKathairis extends Teleporter {
 				f3 = 1.0F;
 			}
 
-			double d3 = entityIn.motionX;
-			double d4 = entityIn.motionZ;
+			double d3 = entityIn.getMotion().x;
+			double d4 = entityIn.getMotion().z;
 			entityIn.motionX = d3 * (double) f + d4 * (double) f3;
 			entityIn.motionZ = d3 * (double) f2 + d4 * (double) f1;
 			entityIn.rotationYaw = rotationYaw - (float) (entityIn.getTeleportDirection().getOpposite().getHorizontalIndex() * 90) + (float) (blockpattern$patternhelper.getForwards().getHorizontalIndex() * 90);
