@@ -1,0 +1,39 @@
+package io.github.krevik.kathairis.block;
+
+import net.minecraft.block.BlockGrass;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.Random;
+
+import static io.github.krevik.kathairis.init.ModBlocks.KATHAIRIS_GRASS;
+
+/**
+ * @author Krevik
+ */
+public class BlockSnowdropCyprepedium extends BlockKathairisPlant {
+
+	public BlockSnowdropCyprepedium() {
+		super();
+	}
+
+	@Override
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		super.tick(state, worldIn, pos, rand);
+
+		if (!worldIn.isRemote) {
+			for (int c = 0; c <= 1 + rand.nextInt(5); c++) {
+				BlockPos tmp = new BlockPos(pos.getX() - 6 + rand.nextInt(12), pos.getY() - 3 + rand.nextInt(6), pos.getZ() - 6 + rand.nextInt(12));
+				if (worldIn.getBlockState(tmp).getBlock() == KATHAIRIS_GRASS) {
+					worldIn.setBlockState(tmp, KATHAIRIS_GRASS.getDefaultState().with(BlockKathairisGrass.SNOWY, Boolean.valueOf(true)), 2);
+				}
+				if (worldIn.getBlockState(tmp) == Blocks.GRASS.getDefaultState()) {
+					worldIn.setBlockState(tmp, Blocks.GRASS.getDefaultState().with(BlockGrass.SNOWY, Boolean.valueOf(true)));
+				}
+			}
+		}
+	}
+
+}
