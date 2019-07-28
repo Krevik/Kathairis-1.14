@@ -12,25 +12,25 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import org.lwjgl.opengl.GL11;
 
 import static io.github.krevik.kathairis.util.ModReference.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiOldMan extends GuiScreen{
-
+public class GuiOldMan extends ScreenGui{
 
     Minecraft mc = Minecraft.getInstance();
     private final int ImageHeight = 340, ImageWidth = 704, ImageScale = 250;
     private static final ResourceLocation GUITextures = new ResourceLocation(MOD_ID,"textures/gui/oldman.png");
     private static int mode=0;
-    private GuiButton Next;
-    private GuiButton Back;
-    private GuiButton Knowledge;
-    private GuiButton Power;
-    private GuiButton Adventure;
-    private GuiButton I_Want_Ethereal;
+    private GuiButtonExt Next;
+    private GuiButtonExt Back;
+    private GuiButtonExt Knowledge;
+    private GuiButtonExt Power;
+    private GuiButtonExt Adventure;
+    private GuiButtonExt I_Want_Ethereal;
     int margin=15;
     private String guiTitle;
     private String nextButtonTitle;

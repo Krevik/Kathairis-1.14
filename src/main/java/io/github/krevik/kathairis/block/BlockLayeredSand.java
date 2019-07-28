@@ -1,11 +1,14 @@
 package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
@@ -15,6 +18,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -45,21 +49,21 @@ public class BlockLayeredSand extends Block {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return getLayers(state) == 8;
 	}
 
 	@Override
-	public boolean isTopSolid(IBlockState state) {
+	public boolean isTopSolid(BlockState state) {
 		return state.get(LAYERS).intValue() == 8;
 	}
 
 	@Override
-	public boolean isReplaceable(IBlockState state, BlockItemUseContext useContext) {
+	public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
 		int i = state.get(LAYERS);
 		if (useContext.getItem().getItem() == this.asItem() && i < 8) {
 			if (useContext.replacingClickedOnBlock()) {
-				return useContext.getFace() == EnumFacing.UP;
+				return useContext.getFace() == Direction.UP;
 			} else {
 				return true;
 			}
@@ -69,17 +73,17 @@ public class BlockLayeredSand extends Block {
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
-		return p_193383_4_ == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+	public BlockFaceShape getBlockFaceShape(IBlockReader p_193383_1_, BlockState p_193383_2_, BlockPos p_193383_3_, Direction p_193383_4_) {
+		return p_193383_4_ == Direction.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 	}
 
 	@Override
-	public VoxelShape getShape(IBlockState p_196244_1_, IBlockReader p_196244_2_, BlockPos p_196244_3_) {
+	public VoxelShape getShape(BlockState p_196244_1_, IBlockReader p_196244_2_, BlockPos p_196244_3_) {
 		return VoxelShapes.create(SAND_AABB[p_196244_1_.get(LAYERS).intValue()]);
 	}
 
 	@Override
-	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+	public void tick(BlockState state, World worldIn, BlockPos pos, Random rand) {
 		if (!worldIn.isRemote) {
 			giveSandToNeighboursNew(state, worldIn, pos);
 		}
@@ -104,23 +108,23 @@ public class BlockLayeredSand extends Block {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		this.checkAndDropBlock(worldIn, pos, state);
 	}
 
 	@Override
-	public int quantityDropped(IBlockState p_196264_1_, Random p_196264_2_) {
+	public int quantityDropped(BlockState p_196264_1_, Random p_196264_2_) {
 		return p_196264_1_.get(LAYERS) + 1;
 	}
 
 	@Override
-	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune) {
+	public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
 		return Item.getItemFromBlock(LAYERED_SAND.getDefaultState().getBlock());
 	}
 
 	@Override
-	public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
-		IBlockState iblockstate = worldIn.getBlockState(pos.down());
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		BlockState iblockstate = worldIn.getBlockState(pos.down());
 		Block block = iblockstate.getBlock();
 		if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
 			BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP);
@@ -131,8 +135,8 @@ public class BlockLayeredSand extends Block {
 	}
 
 	@Nullable
-	public IBlockState getStateForPlacement(BlockItemUseContext context) {
-		IBlockState iblockstate = context.getWorld().getBlockState(context.getPos());
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		BlockState iblockstate = context.getWorld().getBlockState(context.getPos());
 		if (iblockstate.getBlock() == this) {
 			int i = iblockstate.get(LAYERS);
 			return iblockstate.with(LAYERS, Integer.valueOf(Math.min(8, i + 1)));
@@ -142,18 +146,18 @@ public class BlockLayeredSand extends Block {
 	}
 
 	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+	public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 		super.harvestBlock(worldIn, player, pos, state, te, stack);
 		worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		super.fillStateContainer(builder);
 		builder.add(LAYERS);
 	}
 
-	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+	private boolean checkAndDropBlock(World worldIn, BlockPos pos, BlockState state) {
 		if (!this.isValidPosition(state, worldIn, pos)) {
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 			return false;
@@ -162,7 +166,7 @@ public class BlockLayeredSand extends Block {
 		}
 	}
 
-	private void giveSandToNeighboursNew(IBlockState thisState, World world, BlockPos pos) {
+	private void giveSandToNeighboursNew(BlockState thisState, World world, BlockPos pos) {
 		int layers = getLayers(thisState);
 		if (layers > 2) {
 			BlockPos pos1 = pos.east();
@@ -247,7 +251,7 @@ public class BlockLayeredSand extends Block {
 		}
 	}
 
-	protected int getLayers(IBlockState state) {
+	protected int getLayers(BlockState state) {
 		return state.get(this.getLayersProperty()).intValue();
 	}
 
@@ -256,11 +260,11 @@ public class BlockLayeredSand extends Block {
 	}
 
 	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
-		if (face == EnumFacing.UP) {
+	public boolean doesSideBlockRendering(BlockState state, IWorldReader world, BlockPos pos, Direction face) {
+		if (face == Direction.UP) {
 			return true;
 		} else {
-			IBlockState iblockstate = world.getBlockState(pos.offset(face));
+			BlockState iblockstate = world.getBlockState(pos.offset(face));
 			return (iblockstate.getBlock() != this || iblockstate.get(LAYERS).intValue() < state.get(LAYERS).intValue()) && shouldSideBeRendered(state, world, pos, face);
 		}
 	}

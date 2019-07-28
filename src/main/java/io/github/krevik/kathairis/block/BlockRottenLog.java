@@ -1,10 +1,12 @@
 package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -22,12 +24,12 @@ public class BlockRottenLog extends Block {
 
     @Nonnull
     @Override
-    public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune) {
+    public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
         return null;
     }
 
     @Override
-    public boolean canSilkHarvest(IBlockState p_canSilkHarvest_1_, IWorldReader p_canSilkHarvest_2_, BlockPos p_canSilkHarvest_3_, EntityPlayer p_canSilkHarvest_4_) {
+    public boolean canSilkHarvest(BlockState p_canSilkHarvest_1_, IWorldReader p_canSilkHarvest_2_, BlockPos p_canSilkHarvest_3_, PlayerEntity p_canSilkHarvest_4_) {
         return true;
     }
 }

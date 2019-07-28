@@ -1,12 +1,12 @@
 package io.github.krevik.kathairis.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -38,32 +38,27 @@ public class BlockKathairisPlant extends Block implements net.minecraftforge.com
 	}
 
 	@Override
-	public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		return !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return BlockFaceShape.UNDEFINED;
-	}
-
-	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return SHAPE;
 	}
 
 	@Override
-	public int getOpacity(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return 0;
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_) {
+	public void neighborChanged(BlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_) {
 		super.neighborChanged(state, world, pos, p_189540_4_, p_189540_5_);
 		if (!isValidPosition(state, world, pos) || !world.isAirBlock(pos.up())) {
 			world.removeBlock(pos);
@@ -78,27 +73,32 @@ public class BlockKathairisPlant extends Block implements net.minecraftforge.com
 	}
 
 	@Override
-	public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		BlockPos blockpos = pos.down();
 		return this.isValidGround(worldIn.getBlockState(blockpos), worldIn, blockpos) && worldIn.isAirBlock(pos.up());
 	}
 
-	protected boolean isValidGround(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		Block block = state.getBlock();
 		return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL ||
 				block == Blocks.FARMLAND || block == KATHAIRIS_DIRT || block == KATHAIRIS_GRASS;
 	}
 
 	@Override
-	public void onNeighborChange(IBlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
+	public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborChange(state, world, pos, neighbor);
 	}
 
 	@Override
-	public IBlockState getPlant(IBlockReader world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
+	public BlockState getPlant(IBlockReader world, BlockPos pos) {
+		BlockState state = world.getBlockState(pos);
 		if (state.getBlock() != this) return getDefaultState();
 		return state;
 	}
+
+	public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
+		return true;
+	}
+
 
 }

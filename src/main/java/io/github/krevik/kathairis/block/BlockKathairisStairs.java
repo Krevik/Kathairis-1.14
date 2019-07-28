@@ -6,6 +6,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.init.Fluids;
@@ -19,6 +20,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
 import net.minecraft.state.properties.StairsShape;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +36,7 @@ import java.util.stream.IntStream;
 /**
  * @author Krevik
  */
-public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHandler, ILiquidContainer {
+public class BlockKathairisStairs extends StairsBlock implements IBucketPickupHandler, ILiquidContainer {
 
 	public static final DirectionProperty FACING = BlockHorizontal.HORIZONTAL_FACING;
 	public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
@@ -54,11 +56,11 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	protected static final VoxelShape[] field_196521_J = func_199779_a(AABB_SLAB_BOTTOM, field_196514_C, field_196518_G, field_196515_D, field_196519_H);
 	private static final int[] field_196522_K = new int[]{12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
 	private final Block modelBlock;
-	private final IBlockState modelState;
+	private final BlockState modelState;
 
-	public BlockKathairisStairs(IBlockState modelState, Material material, float hardnessResistance, SoundType soundType) {
+	public BlockKathairisStairs(BlockState modelState, Material material, float hardnessResistance, SoundType soundType) {
 		super(modelState, Properties.create(material).sound(soundType).hardnessAndResistance(hardnessResistance));
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, EnumFacing.NORTH).with(HALF, Half.BOTTOM).with(SHAPE, StairsShape.STRAIGHT).with(WATERLOGGED, Boolean.valueOf(false)));
+		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(HALF, Half.BOTTOM).with(SHAPE, StairsShape.STRAIGHT).with(WATERLOGGED, Boolean.valueOf(false)));
 		this.modelBlock = modelState.getBlock();
 		this.modelState = modelState;
 	}
@@ -92,11 +94,11 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 		return voxelshape;
 	}
 
-	private static StairsShape func_208064_n(IBlockState p_208064_0_, IBlockReader p_208064_1_, BlockPos p_208064_2_) {
-		EnumFacing enumfacing = p_208064_0_.get(FACING);
-		IBlockState iblockstate = p_208064_1_.getBlockState(p_208064_2_.offset(enumfacing));
+	private static StairsShape func_208064_n(BlockState p_208064_0_, IBlockReader p_208064_1_, BlockPos p_208064_2_) {
+		Direction enumfacing = p_208064_0_.get(FACING);
+		BlockState iblockstate = p_208064_1_.getBlockState(p_208064_2_.offset(enumfacing));
 		if (isBlockStairs(iblockstate) && p_208064_0_.get(HALF) == iblockstate.get(HALF)) {
-			EnumFacing enumfacing1 = iblockstate.get(FACING);
+			Direction enumfacing1 = iblockstate.get(FACING);
 			if (enumfacing1.getAxis() != p_208064_0_.get(FACING).getAxis() && isDifferentStairs(p_208064_0_, p_208064_1_, p_208064_2_, enumfacing1.getOpposite())) {
 				if (enumfacing1 == enumfacing.rotateYCCW()) {
 					return StairsShape.OUTER_LEFT;
@@ -106,9 +108,9 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 			}
 		}
 
-		IBlockState iblockstate1 = p_208064_1_.getBlockState(p_208064_2_.offset(enumfacing.getOpposite()));
+		BlockState iblockstate1 = p_208064_1_.getBlockState(p_208064_2_.offset(enumfacing.getOpposite()));
 		if (isBlockStairs(iblockstate1) && p_208064_0_.get(HALF) == iblockstate1.get(HALF)) {
-			EnumFacing enumfacing2 = iblockstate1.get(FACING);
+			Direction enumfacing2 = iblockstate1.get(FACING);
 			if (enumfacing2.getAxis() != p_208064_0_.get(FACING).getAxis() && isDifferentStairs(p_208064_0_, p_208064_1_, p_208064_2_, enumfacing2)) {
 				if (enumfacing2 == enumfacing.rotateYCCW()) {
 					return StairsShape.INNER_LEFT;
@@ -121,33 +123,33 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 		return StairsShape.STRAIGHT;
 	}
 
-	private static boolean isDifferentStairs(IBlockState p_185704_0_, IBlockReader p_185704_1_, BlockPos p_185704_2_, EnumFacing p_185704_3_) {
-		IBlockState iblockstate = p_185704_1_.getBlockState(p_185704_2_.offset(p_185704_3_));
+	private static boolean isDifferentStairs(BlockState p_185704_0_, IBlockReader p_185704_1_, BlockPos p_185704_2_, Direction p_185704_3_) {
+		BlockState iblockstate = p_185704_1_.getBlockState(p_185704_2_.offset(p_185704_3_));
 		return !isBlockStairs(iblockstate) || iblockstate.get(FACING) != p_185704_0_.get(FACING) || iblockstate.get(HALF) != p_185704_0_.get(HALF);
 	}
 
-	public static boolean isBlockStairs(IBlockState state) {
-		return state.getBlock() instanceof BlockStairs || state.getBlock() instanceof BlockKathairisStairs;
+	public static boolean isBlockStairs(BlockState state) {
+		return state.getBlock() instanceof StairsBlock || state.getBlock() instanceof BlockKathairisStairs;
 	}
 
 	@Override
-	public int getOpacity(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return worldIn.getMaxLightLevel();
 	}
 
 	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return (state.get(HALF) == Half.TOP ? field_196520_I : field_196521_J)[field_196522_K[this.func_196511_x(state)]];
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		if (face.getAxis() == EnumFacing.Axis.Y) {
-			return face == EnumFacing.UP == (state.get(HALF) == Half.TOP) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
+		if (face.getAxis() == Direction.Axis.Y) {
+			return face == Direction.UP == (state.get(HALF) == Half.TOP) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 		} else {
 			StairsShape stairsshape = state.get(SHAPE);
 			if (stairsshape != StairsShape.OUTER_LEFT && stairsshape != StairsShape.OUTER_RIGHT) {
-				EnumFacing enumfacing = state.get(FACING);
+				Direction enumfacing = state.get(FACING);
 				switch (stairsshape) {
 					case STRAIGHT:
 						return enumfacing == face ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
@@ -165,29 +167,29 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		this.modelBlock.animateTick(stateIn, worldIn, pos, rand);
 	}
 
 	@Override
-	public void onBlockClicked(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player) {
+	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
 		this.modelState.onBlockClicked(worldIn, pos, player);
 	}
 
 	@Override
-	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, IBlockState state) {
+	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
 		this.modelBlock.onPlayerDestroy(worldIn, pos, state);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getPackedLightmapCoords(IBlockState state, IWorldReader source, BlockPos pos) {
+	public int getPackedLightmapCoords(BlockState state, IWorldReader source, BlockPos pos) {
 		return this.modelState.getPackedLightmapCoords(source, pos);
 	}
 
@@ -202,7 +204,7 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public int tickRate(IWorldReaderBase worldIn) {
+	public int tickRate(IWorldReader worldIn) {
 		return this.modelBlock.tickRate(worldIn);
 	}
 
@@ -212,12 +214,12 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public boolean isCollidable(IBlockState state) {
+	public boolean isCollidable(BlockState state) {
 		return this.modelBlock.isCollidable(state);
 	}
 
 	@Override
-	public void onBlockAdded(IBlockState state, World worldIn, BlockPos pos, IBlockState oldState) {
+	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState) {
 		if (state.getBlock() != state.getBlock()) {
 			this.modelState.neighborChanged(worldIn, pos, Blocks.AIR, pos);
 			this.modelBlock.onBlockAdded(this.modelState, worldIn, pos, oldState);
@@ -225,7 +227,7 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
 			this.modelState.onReplaced(worldIn, pos, newState, isMoving);
 		}
@@ -237,13 +239,13 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public void tick(IBlockState state, World worldIn, BlockPos pos, Random random) {
+	public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {
 		this.modelBlock.tick(state, worldIn, pos, random);
 	}
 
 	@Override
-	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		return this.modelState.onBlockActivated(worldIn, pos, player, hand, EnumFacing.DOWN, 0.0F, 0.0F, 0.0F);
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, EnumHand hand, Direction side, float hitX, float hitY, float hitZ) {
+		return this.modelState.onBlockActivated(worldIn, pos, player, hand, Direction.DOWN, 0.0F, 0.0F, 0.0F);
 	}
 
 	@Override
@@ -252,20 +254,20 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public boolean isTopSolid(IBlockState state) {
+	public boolean isTopSolid(BlockState state) {
 		return state.get(HALF) == Half.TOP;
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(BlockItemUseContext context) {
-		EnumFacing enumfacing = context.getFace();
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		Direction enumfacing = context.getFace();
 		IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
-		IBlockState iblockstate = this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing()).with(HALF, enumfacing != EnumFacing.DOWN && (enumfacing == EnumFacing.UP || !((double) context.getHitY() > 0.5D)) ? Half.BOTTOM : Half.TOP).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+		BlockState iblockstate = this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing()).with(HALF, enumfacing != EnumFacing.DOWN && (enumfacing == EnumFacing.UP || !((double) context.getHitY() > 0.5D)) ? Half.BOTTOM : Half.TOP).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
 		return iblockstate.with(SHAPE, func_208064_n(iblockstate, context.getWorld(), context.getPos()));
 	}
 
 	@Override
-	public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		if (stateIn.get(WATERLOGGED)) {
 			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
 		}
@@ -274,17 +276,17 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public IBlockState rotate(IBlockState state, Rotation rot) {
+	public BlockState rotate(BlockState state, Rotation rot) {
 		return state.with(FACING, rot.rotate(state.get(FACING)));
 	}
 
 	@Override
-	public IBlockState mirror(IBlockState state, Mirror mirrorIn) {
-		EnumFacing enumfacing = state.get(FACING);
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		Direction enumfacing = state.get(FACING);
 		StairsShape stairsshape = state.get(SHAPE);
 		switch (mirrorIn) {
 			case LEFT_RIGHT:
-				if (enumfacing.getAxis() == EnumFacing.Axis.Z) {
+				if (enumfacing.getAxis() == Direction.Axis.Z) {
 					switch (stairsshape) {
 						case INNER_LEFT:
 							return state.rotate(Rotation.CLOCKWISE_180).with(SHAPE, StairsShape.INNER_RIGHT);
@@ -300,7 +302,7 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 				}
 				break;
 			case FRONT_BACK:
-				if (enumfacing.getAxis() == EnumFacing.Axis.X) {
+				if (enumfacing.getAxis() == Direction.Axis.X) {
 					switch (stairsshape) {
 						case STRAIGHT:
 							return state.rotate(Rotation.CLOCKWISE_180);
@@ -320,12 +322,12 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING, HALF, SHAPE, WATERLOGGED);
 	}
 
 	@Override
-	public Fluid pickupFluid(IWorld worldIn, BlockPos pos, IBlockState state) {
+	public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state) {
 		if (state.get(WATERLOGGED)) {
 			worldIn.setBlockState(pos, state.with(WATERLOGGED, Boolean.valueOf(false)), 3);
 			return Fluids.WATER;
@@ -335,17 +337,17 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public IFluidState getFluidState(IBlockState state) {
+	public IFluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
 	}
 
 	@Override
-	public boolean canContainFluid(IBlockReader worldIn, BlockPos pos, IBlockState state, Fluid fluidIn) {
+	public boolean canContainFluid(IBlockReader worldIn, BlockPos pos, BlockState state, Fluid fluidIn) {
 		return !state.get(WATERLOGGED) && fluidIn == Fluids.WATER;
 	}
 
 	@Override
-	public boolean receiveFluid(IWorld worldIn, BlockPos pos, IBlockState state, IFluidState fluidStateIn) {
+	public boolean receiveFluid(IWorld worldIn, BlockPos pos, BlockState state, IFluidState fluidStateIn) {
 		if (!state.get(WATERLOGGED) && fluidStateIn.getFluid() == Fluids.WATER) {
 			if (!worldIn.isRemote()) {
 				worldIn.setBlockState(pos, state.with(WATERLOGGED, Boolean.valueOf(true)), 3);
@@ -359,11 +361,11 @@ public class BlockKathairisStairs extends BlockStairs implements IBucketPickupHa
 	}
 
 	@Override
-	public boolean allowsMovement(IBlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+	public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
 		return false;
 	}
 
-	private int func_196511_x(IBlockState p_196511_1_) {
+	private int func_196511_x(BlockState p_196511_1_) {
 		return p_196511_1_.get(SHAPE).ordinal() * 4 + p_196511_1_.get(FACING).getHorizontalIndex();
 	}
 

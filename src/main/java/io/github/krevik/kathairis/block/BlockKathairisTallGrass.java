@@ -1,9 +1,12 @@
 package io.github.krevik.kathairis.block;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -29,12 +32,12 @@ public class BlockKathairisTallGrass extends BlockKathairisPlant {
 	}
 
 	@Override
-	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune) {
+	public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
 		return null;
 	}
 
 	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+	public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if (!worldIn.isRemote && stack.getItem() == Items.SHEARS) {
 			spawnAsEntity(worldIn, pos, new ItemStack(KATHAIRIS_TALL_GRASS, 1));
 		} else {
@@ -43,7 +46,7 @@ public class BlockKathairisTallGrass extends BlockKathairisPlant {
 	}
 
 	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return VoxelShapes.create(TALL_GRASS_AABB);
 	}
 

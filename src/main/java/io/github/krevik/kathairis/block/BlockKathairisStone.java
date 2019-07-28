@@ -2,6 +2,7 @@ package io.github.krevik.kathairis.block;
 
 import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +23,7 @@ public class BlockKathairisStone extends Block {
 
 	@Nonnull
 	@Override
-	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune) {
+	public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
 		return ModBlocks.KATHAIRIS_COBBLESTONE;
 	}
 

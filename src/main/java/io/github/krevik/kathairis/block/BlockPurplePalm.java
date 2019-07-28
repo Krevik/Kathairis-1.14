@@ -2,13 +2,18 @@ package io.github.krevik.kathairis.block;
 
 import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +33,7 @@ public class BlockPurplePalm extends BlockKathairisPlant {
         this.setDefaultState(this.stateContainer.getBaseState().with(VARIANT, BlockPurplePalm.EnumType.NORMAL));
     }
     @Override
-    public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
         if(state.get(VARIANT)==BlockPurplePalm.EnumType.NORMAL){
             return VoxelShapes.create(0,0,0,1,2,1);
         }else{
@@ -37,7 +42,7 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         if(state== ModBlocks.PURPLE_PALM.getDefaultState().with(VARIANT, BlockPurplePalm.EnumType.AIR)){
             return worldIn.getBlockState(pos.down())==ModBlocks.PURPLE_PALM.getDefaultState();
         }else{
@@ -47,7 +52,7 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_) {
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_) {
         if (!isValidPosition(state, world, pos)) {
             if(world.getBlockState(pos.down()).getBlock()==this){
                 world.destroyBlock(pos.down(),false);
@@ -74,12 +79,12 @@ public class BlockPurplePalm extends BlockKathairisPlant {
 
 
     @Override
-    public void onNeighborChange(IBlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
+    public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
 
     }
 
     @Override
-    public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld wo, BlockPos pos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld wo, BlockPos pos, BlockPos facingPos) {
         if(stateIn==ModBlocks.PURPLE_PALM.getDefaultState()) {
             if (wo.isAirBlock(pos.up())) {
                 wo.setBlockState(pos.up(), ModBlocks.PURPLE_PALM.getDefaultState().with(VARIANT, BlockPurplePalm.EnumType.AIR), 2);
@@ -89,7 +94,7 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public void onBlockPlacedBy(World wo, BlockPos pos, IBlockState state, @Nullable EntityLivingBase p_180633_4_, ItemStack p_180633_5_) {
+    public void onBlockPlacedBy(World wo, BlockPos pos, BlockState state, @Nullable LivingEntity p_180633_4_, ItemStack p_180633_5_) {
         if(state==ModBlocks.PURPLE_PALM.getDefaultState()) {
             if (wo.isAirBlock(pos.up())) {
                 wo.setBlockState(pos.up(), ModBlocks.PURPLE_PALM.getDefaultState().with(VARIANT, BlockPurplePalm.EnumType.AIR));
@@ -99,7 +104,7 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public void onBlockAdded(IBlockState p_196259_1_, World wo, BlockPos pos, IBlockState p_196259_4_) {
+    public void onBlockAdded(BlockState p_196259_1_, World wo, BlockPos pos, BlockState p_196259_4_) {
         if(p_196259_1_==ModBlocks.PURPLE_PALM.getDefaultState()) {
             if (wo.isAirBlock(pos.up())) {
                 wo.setBlockState(pos.up(), ModBlocks.PURPLE_PALM.getDefaultState().with(VARIANT, BlockPurplePalm.EnumType.AIR));
@@ -109,7 +114,7 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if(world.getBlockState(pos.down()).getBlock()==this){
             world.destroyBlock(pos.down(),true);
         }
@@ -120,7 +125,7 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public int getItemsToDropCount(IBlockState state, int p_196251_2_, World p_196251_3_, BlockPos p_196251_4_, Random p_196251_5_) {
+    public int getItemsToDropCount(BlockState state, int p_196251_2_, World p_196251_3_, BlockPos p_196251_4_, Random p_196251_5_) {
         if(state==ModBlocks.PURPLE_PALM.getDefaultState()){
             return 1;
         }else{
@@ -129,14 +134,14 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    protected boolean isValidGround(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
         Block block = state.getBlock();
         return block == ModBlocks.WEATHERED_ROCK||block == ModBlocks.KATHAIRIS_STONE||block == ModBlocks.KATHAIRIS_COBBLESTONE||
                 block== Blocks.STONE||block == Blocks.COBBLESTONE||block == ModBlocks.HARDENED_WEATHERED_ROCK;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> p_206840_1_) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> p_206840_1_) {
         super.fillStateContainer(p_206840_1_);
         p_206840_1_.add(VARIANT);
     }

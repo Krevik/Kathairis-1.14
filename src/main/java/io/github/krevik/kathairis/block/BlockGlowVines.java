@@ -2,21 +2,27 @@ package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,10 +44,10 @@ public class BlockGlowVines extends BlockKathairisPlant {
 
 	public BlockGlowVines() {
 		super(Block.Properties.create(Material.PLANTS).hardnessAndResistance(0).sound(SoundType.PLANT).tickRandomly().doesNotBlockMovement().lightValue(5));
-		setDefaultState(getDefaultState().with(VARIANT, EnumType.TOP).with(FACING, EnumFacing.EAST));
+		setDefaultState(getDefaultState().with(VARIANT, EnumType.TOP).with(FACING, Direction.EAST));
 	}
 
-	public static boolean canPlaceBlockAtStatic(IWorldReaderBase worldIn, BlockPos pos) {
+	public static boolean canPlaceBlockAtStatic(IWorldReader worldIn, BlockPos pos) {
 		boolean can = false;
 		if (!worldIn.isAirBlock(pos.east()) && worldIn.getBlockState(pos.east()).isFullCube()) {
 			can = true;
@@ -65,12 +71,12 @@ public class BlockGlowVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 		handleFacing(worldIn, pos, state);
 		handleVariants(worldIn, pos, state);
@@ -84,12 +90,12 @@ public class BlockGlowVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		return canPlaceBlockAt(worldIn, pos);
 	}
 
 	@Override
-	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+	public void tick(BlockState state, World worldIn, BlockPos pos, Random rand) {
 		if (!worldIn.isRemote) {
 			if (rand.nextInt(40) == 0) {
 				grow(worldIn, pos, rand);
@@ -100,12 +106,12 @@ public class BlockGlowVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(IBlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
+	public void dropBlockAsItemWithChance(BlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
 
 	}
 
 	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+	public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if (!worldIn.isRemote && stack.getItem() == Items.SHEARS) {
 			spawnAsEntity(worldIn, pos, new ItemStack(GLOWVINES, 1));
 		} else {
@@ -114,7 +120,7 @@ public class BlockGlowVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		handleFacing(worldIn, pos, state);
 		handleVariants(worldIn, pos, state);
 		if (worldIn.getBlockState(pos.up()).getBlock() instanceof BlockGlowVines) {
@@ -127,7 +133,7 @@ public class BlockGlowVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> p_206840_1_) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> p_206840_1_) {
 		super.fillStateContainer(p_206840_1_);
 		p_206840_1_.add(VARIANT, FACING);
 	}
@@ -153,27 +159,27 @@ public class BlockGlowVines extends BlockKathairisPlant {
 		}
 	}
 
-	public void handleFacing(World world, BlockPos pos, IBlockState state) {
+	public void handleFacing(World world, BlockPos pos, BlockState state) {
 		if (!world.isAirBlock(pos.east()) && !(world.getBlockState(pos.east()).getBlock() instanceof BlockGlowVines)) {
 			if (world.getBlockState(pos).has(FACING)) {
-				world.setBlockState(pos, state.with(FACING, EnumFacing.NORTH));
+				world.setBlockState(pos, state.with(FACING, Direction.NORTH));
 			}
 		} else if (!world.isAirBlock(pos.west()) && !(world.getBlockState(pos.west()).getBlock() instanceof BlockGlowVines)) {
 			if (world.getBlockState(pos).has(FACING)) {
-				world.setBlockState(pos, state.with(FACING, EnumFacing.SOUTH));
+				world.setBlockState(pos, state.with(FACING, Direction.SOUTH));
 			}
 		} else if (!world.isAirBlock(pos.south()) && !(world.getBlockState(pos.south()).getBlock() instanceof BlockGlowVines)) {
 			if (world.getBlockState(pos).has(FACING)) {
-				world.setBlockState(pos, state.with(FACING, EnumFacing.EAST));
+				world.setBlockState(pos, state.with(FACING, Direction.EAST));
 			}
 		} else if (!world.isAirBlock(pos.north()) && !(world.getBlockState(pos.north()).getBlock() instanceof BlockGlowVines)) {
 			if (world.getBlockState(pos).has(FACING)) {
-				world.setBlockState(pos, state.with(FACING, EnumFacing.WEST));
+				world.setBlockState(pos, state.with(FACING, Direction.WEST));
 			}
 		}
 	}
 
-	public void handleVariants(World world, BlockPos pos, IBlockState state) {
+	public void handleVariants(World world, BlockPos pos, BlockState state) {
 		if (world.getBlockState(pos).getBlock() instanceof BlockGlowVines) {
 			EnumType variant = world.getBlockState(pos).get(VARIANT);
 			if (world.getBlockState(pos.up()).getBlock() instanceof BlockGlowVines) {
@@ -200,7 +206,7 @@ public class BlockGlowVines extends BlockKathairisPlant {
 		}
 	}
 
-	public boolean canPlaceBlockAt(IWorldReaderBase worldIn, BlockPos pos) {
+	public boolean canPlaceBlockAt(IWorldReader worldIn, BlockPos pos) {
 		boolean can = false;
 		if (!worldIn.isAirBlock(pos.east()) && worldIn.getBlockState(pos.east()).isFullCube()) {
 			can = true;

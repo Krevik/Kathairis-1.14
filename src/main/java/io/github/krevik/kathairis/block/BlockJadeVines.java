@@ -3,21 +3,27 @@ package io.github.krevik.kathairis.block;
 import io.github.krevik.kathairis.util.networking.PacketHandler;
 import io.github.krevik.kathairis.util.networking.packets.PacketServerPlayerUseJadeVine;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,12 +49,12 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (!worldIn.isRemote) {
 			handleVariantsAndCanBlockBeHere(worldIn, pos, state);
 			if (worldIn.isAirBlock(pos.up())) {
@@ -65,7 +71,7 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		boolean can = false;
 		if (!worldIn.isAirBlock(pos.up()) && worldIn.getBlockState(pos.up()).isFullCube()) {
 			can = true;
@@ -76,7 +82,7 @@ public class BlockJadeVines extends BlockKathairisPlant {
 		return can;
 	}
 
-	private void handleVariantsAndCanBlockBeHere(World world, BlockPos pos, IBlockState actualState) {
+	private void handleVariantsAndCanBlockBeHere(World world, BlockPos pos, BlockState actualState) {
 		if (world.isAirBlock(pos.up())) {
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 		}
@@ -143,7 +149,7 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+	public void tick(BlockState state, World worldIn, BlockPos pos, Random rand) {
 		if (!worldIn.isRemote) {
 			handleVariantsAndCanBlockBeHere(worldIn, pos, state);
 			if (rand.nextInt(20) == 0) {
@@ -158,25 +164,25 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(IBlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
+	public void dropBlockAsItemWithChance(BlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
 
 	}
 
 	@Override
-	public void onEntityCollision(IBlockState p_196262_1_, World world, BlockPos p_196262_3_, Entity entity) {
+	public void onEntityCollision(BlockState p_196262_1_, World world, BlockPos p_196262_3_, Entity entity) {
 		if(world.isRemote) {
 			if(Minecraft.getInstance().gameSettings.keyBindJump.isKeyDown()) {
 				PacketHandler.sendToServer(new PacketServerPlayerUseJadeVine());
 			}
 		}
-		if(entity instanceof EntityPlayer){
+		if(entity instanceof PlayerEntity){
 			entity.fallDistance=0;
 		}
 	}
 
 	@Nullable
 	@Override
-	public IBlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		World world = context.getWorld();
 		Random random = new Random();
 		if (random.nextInt(8) == 0) {
@@ -189,7 +195,7 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+	public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if (!worldIn.isRemote && stack.getItem() == Items.SHEARS) {
 			spawnAsEntity(worldIn, pos, new ItemStack(JADE_VINES, 1));
 		} else {
@@ -198,7 +204,7 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (RANDOM.nextInt(5) == 0) {
 			worldIn.setBlockState(pos, JADE_VINES.getDefaultState().with(VARIANT, EnumType.EMPTY));
 		}
@@ -209,7 +215,7 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> p_206840_1_) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> p_206840_1_) {
 		super.fillStateContainer(p_206840_1_);
 		p_206840_1_.add(VARIANT);
 	}

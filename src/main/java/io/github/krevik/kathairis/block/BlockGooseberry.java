@@ -1,16 +1,21 @@
 package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -39,12 +44,12 @@ public class BlockGooseberry extends Block {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState p_149686_1_) {
+	public boolean isFullCube(BlockState p_149686_1_) {
 		return false;
 	}
 
 	@Override
-	public void tick(IBlockState state, World world, BlockPos pos, Random random) {
+	public void tick(BlockState state, World world, BlockPos pos, Random random) {
 		super.tick(state, world, pos, random);
 		if (!world.isRemote) {
 			if (random.nextInt(50) == 0) {
@@ -54,7 +59,7 @@ public class BlockGooseberry extends Block {
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(IBlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
+	public void dropBlockAsItemWithChance(BlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
 
 	}
 
@@ -65,12 +70,12 @@ public class BlockGooseberry extends Block {
 	}
 
 	@Override
-	public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		return (worldIn.getLightSubtracted(pos, 0) >= 8 || worldIn.canSeeSky(pos)) && isValidGround(worldIn.getBlockState(pos.down()), worldIn, pos.down());
 	}
 
 	@Override
-	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, net.minecraft.util.EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, net.minecraft.util.EnumHand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		boolean result = false;
 		if (state == GOOSEBERRY_BUSH.getDefaultState().with(VARIANT, EnumType.WITH)) {
 			player.addItemStackToInventory(new ItemStack(GOOSEBERRIES, 1 + player.getRNG().nextInt(5)));
@@ -81,11 +86,11 @@ public class BlockGooseberry extends Block {
 	}
 
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		Random random = new Random();
 		if (state == GOOSEBERRY_BUSH.getDefaultState().with(VARIANT, EnumType.WITH)) {
 			for (int c = 0; c < (2 + random.nextInt(4)); c++) {
-				EntityItem is = new EntityItem(world);
+				ItemEntity is = new ItemEntity(world);
 				is.setItem(new ItemStack(GOOSEBERRIES));
 				is.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 				if (!world.isRemote) {
@@ -97,16 +102,16 @@ public class BlockGooseberry extends Block {
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(VARIANT);
 	}
 
 	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
+	public boolean doesSideBlockRendering(BlockState state, IWorldReader world, BlockPos pos, Direction face) {
 		return true;
 	}
 
-	protected boolean isValidGround(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return state.getBlock() == Blocks.FARMLAND || state.getBlock() == KATHAIRIS_DIRT ||
 				state.getBlock() == KATHAIRIS_GRASS || state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT;
 	}

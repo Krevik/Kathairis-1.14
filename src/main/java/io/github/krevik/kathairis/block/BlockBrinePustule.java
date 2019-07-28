@@ -1,10 +1,7 @@
 package io.github.krevik.kathairis.block;
 
 import io.github.krevik.kathairis.init.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.BlockItemUseContext;
@@ -14,11 +11,13 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,16 +42,16 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
     public BlockBrinePustule() {
         super(Block.Properties.create(Material.PLANTS)
                 .doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT));
-        setDefaultState(getDefaultState().with(FACING, EnumFacing.NORTH).with(AGE,0));
+        setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(AGE,0));
     }
 
     @Override
-    public void onPlantGrow(IBlockState state, IWorld world, BlockPos pos, BlockPos source) {
+    public void onPlantGrow(BlockState state, IWorld world, BlockPos pos, BlockPos source) {
 
     }
 
     @Override
-    public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+    public void tick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         handleFacing(state, worldIn, pos);
         if (!this.isStoneAround(worldIn, pos)) {
             this.dropBlock(worldIn, pos, state);
@@ -66,31 +65,31 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
 
     @Nullable
     @Override
-    public IBlockState getStateForPlacement(BlockItemUseContext context) {
-        EnumFacing facing = context.getFace();
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        Direction facing = context.getFace();
         World world = context.getWorld();
         BlockPos pos = context.getPos();
         if (isStone(world.getBlockState(pos.east()).getBlock())) {
-            return BRINE_PUSTULE.getDefaultState().with(FACING, EnumFacing.EAST);
+            return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.EAST);
         } else if (isStone(world.getBlockState(pos.west()).getBlock())) {
-            return BRINE_PUSTULE.getDefaultState().with(FACING, EnumFacing.WEST);
+            return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.WEST);
         } else if (isStone(world.getBlockState(pos.south()).getBlock())) {
-            return BRINE_PUSTULE.getDefaultState().with(FACING, EnumFacing.SOUTH);
+            return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.SOUTH);
         } else if (isStone(world.getBlockState(pos.north()).getBlock())) {
-            return BRINE_PUSTULE.getDefaultState().with(FACING, EnumFacing.NORTH);
+            return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.NORTH);
         } else {
-            return BRINE_PUSTULE.getDefaultState().with(FACING, EnumFacing.WEST);
+            return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.WEST);
         }
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
         builder.add(FACING);
         builder.add(AGE);
     }
 
-    public boolean isStoneAround(IWorldReaderBase worldIn, BlockPos pos) {
+    public boolean isStoneAround(IWorldReader worldIn, BlockPos pos) {
         boolean is = false;
         ArrayList<BlockPos> blockPoses = new ArrayList<>();
         blockPoses.add(pos.west());
@@ -99,7 +98,7 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
         blockPoses.add(pos.south());
 
         for(BlockPos poses:blockPoses){
-            IBlockState state = worldIn.getBlockState(poses);
+            BlockState state = worldIn.getBlockState(poses);
             if(state.getBlock() instanceof BlockKathairisStone || state.getBlock() instanceof BlockStone){
                 is=true;
             }
@@ -108,18 +107,18 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
         return is;
     }
 
-    private void dropBlock(World worldIn, BlockPos pos, IBlockState state) {
+    private void dropBlock(World worldIn, BlockPos pos, BlockState state) {
         worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
         spawnAsEntity(worldIn, pos, new ItemStack(this));
     }
 
     @Override
-    public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+    public IItemProvider getItemDropped(BlockState state, World world, BlockPos pos, int fortune) {
             return ModItems.MINERAL_FRUIT;
     }
 
     @Override
-    public int getItemsToDropCount(IBlockState state, int fortune, World world, BlockPos pos, Random random) {
+    public int getItemsToDropCount(BlockState state, int fortune, World world, BlockPos pos, Random random) {
         if(state.get(AGE)==0){
             return 1;
         }else{
@@ -128,18 +127,18 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
     }
 
     @Override
-    public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
         handleFacing(stateIn, worldIn, currentPos);
         return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         handleFacing(state, worldIn, pos);
         if (!this.isStoneAround(worldIn, pos)) {
             this.dropBlock(worldIn, pos, state);
@@ -154,22 +153,22 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
     }
 
     @Override
-    public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         return isStoneAround(worldIn, pos);
     }
 
-    private void handleFacing(IBlockState state, IWorld world, BlockPos pos) {
+    private void handleFacing(BlockState state, IWorld world, BlockPos pos) {
         if (isStone(world.getBlockState(pos.east()).getBlock())) {
-            world.setBlockState(pos, state.with(FACING, EnumFacing.EAST), 2);
+            world.setBlockState(pos, state.with(FACING, Direction.EAST), 2);
         }
         if (isStone(world.getBlockState(pos.west()).getBlock())) {
-            world.setBlockState(pos, state.with(FACING, EnumFacing.WEST), 2);
+            world.setBlockState(pos, state.with(FACING, Direction.WEST), 2);
         }
         if (isStone(world.getBlockState(pos.south()).getBlock())) {
-            world.setBlockState(pos, state.with(FACING, EnumFacing.SOUTH), 2);
+            world.setBlockState(pos, state.with(FACING, Direction.SOUTH), 2);
         }
         if (isStone(world.getBlockState(pos.north()).getBlock())) {
-            world.setBlockState(pos, state.with(FACING, EnumFacing.NORTH), 2);
+            world.setBlockState(pos, state.with(FACING, Direction.NORTH), 2);
         }
     }
 
@@ -178,17 +177,17 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
     }
 
     @Override
-    public boolean canGrow(IBlockReader iBlockReader, BlockPos blockPos, IBlockState iBlockState, boolean b) {
+    public boolean canGrow(IBlockReader iBlockReader, BlockPos blockPos, BlockState iBlockState, boolean b) {
         return iBlockState.get(AGE)<1;
     }
 
     @Override
-    public boolean canUseBonemeal(World world, Random random, BlockPos blockPos, IBlockState iBlockState) {
+    public boolean canUseBonemeal(World world, Random random, BlockPos blockPos, BlockState iBlockState) {
         return iBlockState.get(AGE)<1;
     }
 
     @Override
-    public void grow(World world, Random random, BlockPos blockPos, IBlockState iBlockState) {
+    public void grow(World world, Random random, BlockPos blockPos, BlockState iBlockState) {
         world.setBlockState(blockPos,iBlockState.with(AGE,1));
     }
 }

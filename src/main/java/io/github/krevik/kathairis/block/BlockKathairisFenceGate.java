@@ -1,17 +1,17 @@
 package io.github.krevik.kathairis.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 /**
  * @author Krevik
  */
-public class BlockKathairisFenceGate extends BlockFenceGate {
+public class BlockKathairisFenceGate extends FenceGateBlock {
 
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -46,17 +46,17 @@ public class BlockKathairisFenceGate extends BlockFenceGate {
 	}
 
 	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		if (state.get(IN_WALL)) {
-			return state.get(HORIZONTAL_FACING).getAxis() == EnumFacing.Axis.X ? AABB_HITBOX_XAXIS_INWALL : AABB_HITBOX_ZAXIS_INWALL;
+			return state.get(HORIZONTAL_FACING).getAxis() == Direction.Axis.X ? AABB_HITBOX_XAXIS_INWALL : AABB_HITBOX_ZAXIS_INWALL;
 		} else {
-			return state.get(HORIZONTAL_FACING).getAxis() == EnumFacing.Axis.X ? AABB_HITBOX_XAXIS : AABB_HITBOX_ZAXIS;
+			return state.get(HORIZONTAL_FACING).getAxis() == Direction.Axis.X ? AABB_HITBOX_XAXIS : AABB_HITBOX_ZAXIS;
 		}
 	}
 
 	@Override
-	public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		EnumFacing.Axis enumfacing$axis = facing.getAxis();
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+		Direction.Axis enumfacing$axis = facing.getAxis();
 		if (stateIn.get(HORIZONTAL_FACING).rotateY().getAxis() != enumfacing$axis) {
 			return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 		} else {
@@ -66,30 +66,30 @@ public class BlockKathairisFenceGate extends BlockFenceGate {
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		if (state.get(OPEN)) {
 			return VoxelShapes.empty();
 		} else {
-			return state.get(HORIZONTAL_FACING).getAxis() == EnumFacing.Axis.Z ? field_208068_x : AABB_COLLISION_BOX_XAXIS;
+			return state.get(HORIZONTAL_FACING).getAxis() == Direction.Axis.Z ? field_208068_x : AABB_COLLISION_BOX_XAXIS;
 		}
 	}
 
 	@Override
-	public VoxelShape getRenderShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		if (state.get(IN_WALL)) {
-			return state.get(HORIZONTAL_FACING).getAxis() == EnumFacing.Axis.X ? field_208067_C : field_208066_B;
+			return state.get(HORIZONTAL_FACING).getAxis() == Direction.Axis.X ? field_208067_C : field_208066_B;
 		} else {
-			return state.get(HORIZONTAL_FACING).getAxis() == EnumFacing.Axis.X ? AABB_COLLISION_BOX_ZAXIS : field_208069_z;
+			return state.get(HORIZONTAL_FACING).getAxis() == Direction.Axis.X ? AABB_COLLISION_BOX_ZAXIS : field_208069_z;
 		}
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean allowsMovement(IBlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+	public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
 		switch (type) {
 			case LAND:
 				return state.get(OPEN);
@@ -103,23 +103,23 @@ public class BlockKathairisFenceGate extends BlockFenceGate {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		World world = context.getWorld();
 		BlockPos blockpos = context.getPos();
 		boolean flag = world.isBlockPowered(blockpos);
-		EnumFacing enumfacing = context.getPlacementHorizontalFacing();
-		EnumFacing.Axis enumfacing$axis = enumfacing.getAxis();
-		boolean flag1 = enumfacing$axis == EnumFacing.Axis.Z && (this.isWall(world.getBlockState(blockpos.west())) || this.isWall(world.getBlockState(blockpos.east()))) || enumfacing$axis == EnumFacing.Axis.X && (this.isWall(world.getBlockState(blockpos.north())) || this.isWall(world.getBlockState(blockpos.south())));
+		Direction enumfacing = context.getPlacementHorizontalFacing();
+		Direction.Axis enumfacing$axis = enumfacing.getAxis();
+		boolean flag1 = enumfacing$axis == Direction.Axis.Z && (this.isWall(world.getBlockState(blockpos.west())) || this.isWall(world.getBlockState(blockpos.east()))) || enumfacing$axis == EnumFacing.Axis.X && (this.isWall(world.getBlockState(blockpos.north())) || this.isWall(world.getBlockState(blockpos.south())));
 		return this.getDefaultState().with(HORIZONTAL_FACING, enumfacing).with(OPEN, Boolean.valueOf(flag)).with(POWERED, Boolean.valueOf(flag)).with(IN_WALL, Boolean.valueOf(flag1));
 	}
 
 	@Override
-	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, EnumHand hand, Direction side, float hitX, float hitY, float hitZ) {
 		if (state.get(OPEN)) {
 			state = state.with(OPEN, Boolean.valueOf(false));
 			worldIn.setBlockState(pos, state, 10);
 		} else {
-			EnumFacing enumfacing = player.getHorizontalFacing();
+			Direction enumfacing = player.getHorizontalFacing();
 			if (state.get(HORIZONTAL_FACING) == enumfacing.getOpposite()) {
 				state = state.with(HORIZONTAL_FACING, enumfacing);
 			}
@@ -133,7 +133,7 @@ public class BlockKathairisFenceGate extends BlockFenceGate {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (!worldIn.isRemote) {
 			boolean flag = worldIn.isBlockPowered(pos);
 			if (state.get(POWERED) != flag) {
@@ -147,12 +147,12 @@ public class BlockKathairisFenceGate extends BlockFenceGate {
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(HORIZONTAL_FACING, OPEN, POWERED, IN_WALL);
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
 		if (face != EnumFacing.UP && face != EnumFacing.DOWN) {
 			return state.get(HORIZONTAL_FACING).getAxis() == face.rotateY().getAxis() ? BlockFaceShape.MIDDLE_POLE : BlockFaceShape.UNDEFINED;
 		} else {
@@ -161,7 +161,7 @@ public class BlockKathairisFenceGate extends BlockFenceGate {
 	}
 
 	@Override
-	public boolean canBeConnectedTo(IBlockState state, IBlockReader world, BlockPos pos, EnumFacing facing) {
+	public boolean canBeConnectedTo(BlockState state, IBlockReader world, BlockPos pos, Direction facing) {
 		if (state.getBlockFaceShape(world, pos, facing) == BlockFaceShape.MIDDLE_POLE) {
 			Block other = world.getBlockState(pos.offset(facing)).getBlock();
 			return other instanceof BlockFence || other instanceof BlockWall || other instanceof BlockKathairisFence || other instanceof BlockKathairisWall;
@@ -169,7 +169,7 @@ public class BlockKathairisFenceGate extends BlockFenceGate {
 		return false;
 	}
 
-	private boolean isWall(IBlockState p_196380_1_) {
+	private boolean isWall(BlockState p_196380_1_) {
 		return p_196380_1_.getBlock() == Blocks.COBBLESTONE_WALL || p_196380_1_.getBlock() == Blocks.MOSSY_COBBLESTONE_WALL || p_196380_1_.getBlock() instanceof BlockWall || p_196380_1_.getBlock() instanceof BlockKathairisWall;
 	}
 

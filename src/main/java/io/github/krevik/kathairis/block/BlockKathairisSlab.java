@@ -1,9 +1,6 @@
 package io.github.krevik.kathairis.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.block.ILiquidContainer;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -19,6 +16,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -32,7 +30,7 @@ import java.util.Random;
 /**
  * @author Krevik
  */
-public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandler, ILiquidContainer {
+public class BlockKathairisSlab extends SlabBlock implements IBucketPickupHandler, ILiquidContainer {
 
 	public static final EnumProperty<SlabType> TYPE = BlockStateProperties.SLAB_TYPE;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -45,12 +43,12 @@ public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandle
 	}
 
 	@Override
-	public int getOpacity(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return worldIn.getMaxLightLevel();
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(TYPE, WATERLOGGED);
 	}
 
@@ -60,7 +58,7 @@ public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandle
 	}
 
 	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		SlabType slabtype = state.get(TYPE);
 		switch (slabtype) {
 			case DOUBLE:
@@ -73,58 +71,58 @@ public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandle
 	}
 
 	@Override
-	public boolean isTopSolid(IBlockState state) {
+	public boolean isTopSolid(BlockState state) {
 		return state.get(TYPE) == SlabType.DOUBLE || state.get(TYPE) == SlabType.TOP;
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
 		SlabType slabtype = state.get(TYPE);
 		if (slabtype == SlabType.DOUBLE) {
 			return BlockFaceShape.SOLID;
-		} else if (face == EnumFacing.UP && slabtype == SlabType.TOP) {
+		} else if (face == Direction.UP && slabtype == SlabType.TOP) {
 			return BlockFaceShape.SOLID;
 		} else {
-			return face == EnumFacing.DOWN && slabtype == SlabType.BOTTOM ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+			return face == Direction.DOWN && slabtype == SlabType.BOTTOM ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 		}
 	}
 
 	@Nullable
 	@Override
-	public IBlockState getStateForPlacement(BlockItemUseContext context) {
-		IBlockState iblockstate = context.getWorld().getBlockState(context.getPos());
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		BlockState iblockstate = context.getWorld().getBlockState(context.getPos());
 		if (iblockstate.getBlock() == this) {
 			return iblockstate.with(TYPE, SlabType.DOUBLE).with(WATERLOGGED, Boolean.valueOf(false));
 		} else {
 			IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
-			IBlockState iblockstate1 = this.getDefaultState().with(TYPE, SlabType.BOTTOM).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
-			EnumFacing enumfacing = context.getFace();
-			return enumfacing != EnumFacing.DOWN && (enumfacing == EnumFacing.UP || !((double) context.getHitY() > 0.5D)) ? iblockstate1 : iblockstate1.with(TYPE, SlabType.TOP);
+			BlockState iblockstate1 = this.getDefaultState().with(TYPE, SlabType.BOTTOM).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+			Direction enumfacing = context.getFace();
+			return enumfacing != Direction.DOWN && (enumfacing == Direction.UP || !((double) context.getHitY() > 0.5D)) ? iblockstate1 : iblockstate1.with(TYPE, SlabType.TOP);
 		}
 	}
 
 	@Override
-	public int quantityDropped(IBlockState state, Random random) {
+	public int quantityDropped(BlockState state, Random random) {
 		return state.get(TYPE) == SlabType.DOUBLE ? 2 : 1;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return state.get(TYPE) == SlabType.DOUBLE;
 	}
 
 	@Override
-	public boolean isReplaceable(IBlockState state, BlockItemUseContext useContext) {
+	public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
 		ItemStack itemstack = useContext.getItem();
 		SlabType slabtype = state.get(TYPE);
 		if (slabtype != SlabType.DOUBLE && itemstack.getItem() == this.asItem()) {
 			if (useContext.replacingClickedOnBlock()) {
 				boolean flag = (double) useContext.getHitY() > 0.5D;
-				EnumFacing enumfacing = useContext.getFace();
+				Direction enumfacing = useContext.getFace();
 				if (slabtype == SlabType.BOTTOM) {
-					return enumfacing == EnumFacing.UP || flag && enumfacing.getAxis().isHorizontal();
+					return enumfacing == Direction.UP || flag && enumfacing.getAxis().isHorizontal();
 				} else {
-					return enumfacing == EnumFacing.DOWN || !flag && enumfacing.getAxis().isHorizontal();
+					return enumfacing == Direction.DOWN || !flag && enumfacing.getAxis().isHorizontal();
 				}
 			} else {
 				return true;
@@ -135,7 +133,7 @@ public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandle
 	}
 
 	@Override
-	public Fluid pickupFluid(IWorld worldIn, BlockPos pos, IBlockState state) {
+	public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state) {
 		if (state.get(WATERLOGGED)) {
 			worldIn.setBlockState(pos, state.with(WATERLOGGED, Boolean.valueOf(false)), 3);
 			return Fluids.WATER;
@@ -145,17 +143,17 @@ public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandle
 	}
 
 	@Override
-	public IFluidState getFluidState(IBlockState state) {
+	public IFluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
 	}
 
 	@Override
-	public boolean canContainFluid(IBlockReader worldIn, BlockPos pos, IBlockState state, Fluid fluidIn) {
+	public boolean canContainFluid(IBlockReader worldIn, BlockPos pos, BlockState state, Fluid fluidIn) {
 		return state.get(TYPE) != SlabType.DOUBLE && !state.get(WATERLOGGED) && fluidIn == Fluids.WATER;
 	}
 
 	@Override
-	public boolean receiveFluid(IWorld worldIn, BlockPos pos, IBlockState state, IFluidState fluidStateIn) {
+	public boolean receiveFluid(IWorld worldIn, BlockPos pos, BlockState state, IFluidState fluidStateIn) {
 		if (state.get(TYPE) != SlabType.DOUBLE && !state.get(WATERLOGGED) && fluidStateIn.getFluid() == Fluids.WATER) {
 			if (!worldIn.isRemote()) {
 				worldIn.setBlockState(pos, state.with(WATERLOGGED, Boolean.valueOf(true)), 3);
@@ -169,7 +167,7 @@ public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandle
 	}
 
 	@Override
-	public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		if (stateIn.get(WATERLOGGED)) {
 			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
 		}
@@ -178,7 +176,7 @@ public class BlockKathairisSlab extends BlockSlab implements IBucketPickupHandle
 	}
 
 	@Override
-	public boolean allowsMovement(IBlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+	public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
 		switch (type) {
 			case LAND:
 				return state.get(TYPE) == SlabType.BOTTOM;

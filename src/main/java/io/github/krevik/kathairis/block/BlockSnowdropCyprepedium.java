@@ -1,6 +1,9 @@
 package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.BlockGrass;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.GrassBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +23,7 @@ public class BlockSnowdropCyprepedium extends BlockKathairisPlant {
 	}
 
 	@Override
-	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+	public void tick(BlockState state, World worldIn, BlockPos pos, Random rand) {
 		super.tick(state, worldIn, pos, rand);
 
 		if (!worldIn.isRemote) {
@@ -30,7 +33,7 @@ public class BlockSnowdropCyprepedium extends BlockKathairisPlant {
 					worldIn.setBlockState(tmp, KATHAIRIS_GRASS.getDefaultState().with(BlockKathairisGrass.SNOWY, Boolean.valueOf(true)), 2);
 				}
 				if (worldIn.getBlockState(tmp) == Blocks.GRASS.getDefaultState()) {
-					worldIn.setBlockState(tmp, Blocks.GRASS.getDefaultState().with(BlockGrass.SNOWY, Boolean.valueOf(true)));
+					worldIn.setBlockState(tmp, Blocks.GRASS.getDefaultState().with(GrassBlock.SNOWY, Boolean.valueOf(true)));
 				}
 			}
 		}

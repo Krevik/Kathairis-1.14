@@ -1,5 +1,6 @@
 package io.github.krevik.kathairis.block;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +20,7 @@ public class BlockBisonStars extends BlockKathairisPlant {
 	}
 
 	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return VoxelShapes.create(BISON_STARS_AABB);
 	}
 
