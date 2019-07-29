@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
  * Howler - HKhugo
  * Created using Tabula 7.0.0
  */
-public class ModelHowler<T extends LivingEntity> extends EntityModel<T> {
+public class ModelHowler<T extends LivingEntity> extends EntityModel<EntityHowler> {
   public RendererModel FrontRightLeg1;
   public RendererModel Body1;
   public RendererModel Head1;
@@ -160,7 +160,7 @@ public class ModelHowler<T extends LivingEntity> extends EntityModel<T> {
   }
 
   @Override
-  public void render(T entity, float f, float f1, float f2, float f3, float f4, float f5) {
+  public void render(EntityHowler entity, float f, float f1, float f2, float f3, float f4, float f5) {
     this.Head1.render(f5);
     this.Body1.render(f5);
     this.FrontLeftLeg1.render(f5);
@@ -200,13 +200,11 @@ public class ModelHowler<T extends LivingEntity> extends EntityModel<T> {
   float[] Tail3RZ = {0,helper.degToRad(-32f),helper.degToRad(32f),0};
 
   @Override
-  public void setRotationAngles(T entity, float limbSwing, float limbSwingAmount, float age, float f3, float f4, float f5 )
+  public void setRotationAngles(EntityHowler entity, float limbSwing, float limbSwingAmount, float age, float f3, float f4, float f5 )
   {
     super.setRotationAngles(entity, limbSwing,limbSwingAmount,age,f3,f4,f5);
-    if(entity instanceof EntityHowler){
-        EntityHowler howler = (EntityHowler) entity;
-        float timer = howler.getAnimTimer();
-        float timerTail = howler.getAnimTimerTail();
+        float timer = entity.getAnimTimer();
+        float timerTail = entity.getAnimTimerTail();
         if(timerTail<101){
           Tail.rotateAngleZ=Tail3RZ[0]+(Tail3RZ[1]-Tail3RZ[0])*(timerTail)/100f;
         }
@@ -226,7 +224,7 @@ public class ModelHowler<T extends LivingEntity> extends EntityModel<T> {
           BehindRightLeg3.rotateAngleX=BehindRightLeg3R[1]*timer/100;
           BehindLeftLeg1.rotateAngleX=BehindLeftLeg1R[1]*timer/100;
           BehindLeftLeg3.rotateAngleX=BehindLeftLeg3R[1]*timer/100;
-          if(howler.getShouldAnimJaw()){
+          if(entity.getShouldAnimJaw()){
             Head3.rotateAngleX=Head3R[0];
           }else{
             Head3.rotateAngleX=0;
@@ -241,7 +239,7 @@ public class ModelHowler<T extends LivingEntity> extends EntityModel<T> {
           BehindRightLeg3.rotateAngleX=BehindRightLeg3R[1]+(BehindRightLeg3R[2]-BehindRightLeg3R[1])*(timer-100)/100f;
           BehindLeftLeg1.rotateAngleX=BehindLeftLeg1R[1]+(BehindLeftLeg1R[2]-BehindLeftLeg1R[1])*(timer-100)/100f;
           BehindLeftLeg3.rotateAngleX=BehindLeftLeg3R[1]+(BehindLeftLeg3R[2]-BehindLeftLeg3R[1])*(timer-100)/100f;
-          if(howler.getShouldAnimJaw()) {
+          if(entity.getShouldAnimJaw()) {
             Head3.rotateAngleX=Head3R[0]+(Head3R[1]-Head3R[0])*(timer-100)/100f;
           }else{
             Head3.rotateAngleX=0;
@@ -256,13 +254,12 @@ public class ModelHowler<T extends LivingEntity> extends EntityModel<T> {
           BehindRightLeg3.rotateAngleX=BehindRightLeg3R[2]+(BehindRightLeg3R[3]-BehindRightLeg3R[2])*(timer-200)/100f;
           BehindLeftLeg1.rotateAngleX=BehindLeftLeg1R[2]+(BehindLeftLeg1R[3]-BehindLeftLeg1R[2])*(timer-200)/100f;
           BehindLeftLeg3.rotateAngleX=BehindLeftLeg3R[2]+(BehindLeftLeg3R[3]-BehindLeftLeg3R[2])*(timer-200)/100f;
-          if(howler.getShouldAnimJaw()){
+          if(entity.getShouldAnimJaw()){
             Head3.rotateAngleX=Head3R[1]+(Head3R[2]-Head3R[1])*(timer-200)/100f;
           }else{
             Head3.rotateAngleX=0;
           }
         }
-      }
   }
 
 

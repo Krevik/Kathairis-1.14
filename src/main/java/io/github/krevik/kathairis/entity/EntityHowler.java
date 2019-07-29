@@ -9,6 +9,7 @@ import io.github.krevik.kathairis.init.ModSounds;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +26,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityHowler extends EntityMob
+public class EntityHowler extends MobEntity
 {
     private static final DataParameter<Float> animTimer = EntityDataManager.createKey(EntityHowler.class, DataSerializers.FLOAT);
     private static final DataParameter<Float> animTimerTail = EntityDataManager.createKey(EntityHowler.class, DataSerializers.FLOAT);

@@ -7,6 +7,7 @@ import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +19,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public class EntityBigTurtle extends EntityAnimal
+public class EntityBigTurtle extends AnimalEntity
 {
     private ArrayList<Block> spawnableBlocks;
     public EntityBigTurtle(World worldIn)

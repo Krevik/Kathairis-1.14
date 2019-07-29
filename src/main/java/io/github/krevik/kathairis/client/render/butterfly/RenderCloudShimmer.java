@@ -1,9 +1,13 @@
 package io.github.krevik.kathairis.client.render.butterfly;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.krevik.kathairis.client.model.butterfly.ModelCloudShimmer;
 import io.github.krevik.kathairis.entity.butterfly.EntityCloudShimmer;
 import io.github.krevik.kathairis.util.TextureLocationsRef;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -13,14 +17,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderCloudShimmer extends RenderLiving<EntityCloudShimmer>
+public class RenderCloudShimmer extends LivingRenderer<EntityCloudShimmer, ModelCloudShimmer<EntityCloudShimmer>>
 {
     public static final Factory FACTORY = new Factory();
-    public RenderCloudShimmer(RenderManager renderManagerIn)
+    public RenderCloudShimmer(EntityRendererManager renderManagerIn)
     {
         super(renderManagerIn, new ModelCloudShimmer(), 0F);
     }
-
 
     @Override
     protected ResourceLocation getEntityTexture(EntityCloudShimmer entity)
@@ -31,7 +34,7 @@ public class RenderCloudShimmer extends RenderLiving<EntityCloudShimmer>
     public static class Factory implements IRenderFactory<EntityCloudShimmer> {
 
         @Override
-        public Render<? super EntityCloudShimmer> createRenderFor(RenderManager manager) {
+        public EntityRenderer<? super EntityCloudShimmer> createRenderFor(EntityRendererManager manager) {
             return new RenderCloudShimmer(manager);
         }
 
@@ -42,7 +45,6 @@ public class RenderCloudShimmer extends RenderLiving<EntityCloudShimmer>
     {
     	GlStateManager.scaled(0.3, 0.3, 0.3);
         super.applyRotations(entityLiving, p_77043_2_, rotationYaw, partialTicks);
-        
     }
     
 }

@@ -3,6 +3,9 @@ package io.github.krevik.kathairis.client.render;
 import io.github.krevik.kathairis.client.model.ModelPhasm;
 import io.github.krevik.kathairis.entity.EntityPhasm;
 import io.github.krevik.kathairis.util.TextureLocationsRef;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -13,11 +16,11 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderPhasm extends RenderLiving<EntityPhasm> {
+public class RenderPhasm extends LivingRenderer<EntityPhasm, ModelPhasm<EntityPhasm>> {
 
     public static final Factory FACTORY = new Factory();
 
-    public RenderPhasm(RenderManager renderManagerIn) {
+    public RenderPhasm(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new ModelPhasm(), 0.0F);
     }
 
@@ -30,7 +33,7 @@ public class RenderPhasm extends RenderLiving<EntityPhasm> {
     public static class Factory implements IRenderFactory<EntityPhasm> {
 
         @Override
-        public Render<? super EntityPhasm> createRenderFor(RenderManager manager) {
+        public EntityRenderer<? super EntityPhasm> createRenderFor(EntityRendererManager manager) {
             return new RenderPhasm(manager);
         }
 

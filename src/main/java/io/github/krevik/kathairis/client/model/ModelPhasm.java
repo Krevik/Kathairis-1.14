@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Created using Tabula 7.0.0
  */
 @OnlyIn(Dist.CLIENT)
-public class ModelPhasm<T extends LivingEntity> extends EntityModel<T> {
+public class ModelPhasm<T extends LivingEntity> extends EntityModel<EntityPhasm> {
     public RendererModel Head;
     public RendererModel Body1;
     public RendererModel InnerHead;
@@ -65,7 +65,7 @@ public class ModelPhasm<T extends LivingEntity> extends EntityModel<T> {
     }
 
     @Override
-    public void render(T entity, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void render(EntityPhasm entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.Body1.render(f5);
         this.Head.render(f5);
     }
@@ -80,19 +80,17 @@ public class ModelPhasm<T extends LivingEntity> extends EntityModel<T> {
     }
 
     FunctionHelper helper = Kathairis.getHelper();
+
     @Override
-    public void setRotationAngles(T entity, float limbSwing, float limbSwingAmount, float f2, float f3, float f4, float f5) {
+    public void setRotationAngles(EntityPhasm entity, float limbSwing, float limbSwingAmount, float f2, float f3, float f4, float f5) {
         super.setRotationAngles(entity, limbSwing, limbSwingAmount, f2, f3, f4, f5);
         setRotateAngle(LeftArm,0+ MathHelper.sin(f2*0.05f)*0.1f,0,helper.degToRad(23.48f)- MathHelper.sin(f2*0.05f)*0.1f);
         setRotateAngle(RightArm,0- MathHelper.sin(f2*0.05f)*0.1f,0,helper.degToRad(-18.26f)+ MathHelper.sin(f2*0.05f)*0.1f);
         setRotateAngle(Body2,helper.degToRad(21)+ MathHelper.sin(f2*0.05f)*0.15f,0,0);
-        if(entity instanceof EntityPhasm){
-            EntityPhasm phasm = (EntityPhasm) entity;
-            if(phasm.getIsSwingingArms()){
+            if(entity.getIsSwingingArms()){
                 setRotateAngle(LeftArm,helper.degToRad(-86)+ MathHelper.sin(f2*0.05f)*0.1f,0,helper.degToRad(23.48f)- MathHelper.sin(f2*0.05f)*0.1f);
                 setRotateAngle(RightArm,helper.degToRad(-86)- MathHelper.sin(f2*0.05f)*0.1f,0,helper.degToRad(-18.26f)+ MathHelper.sin(f2*0.05f)*0.1f);
 
             }
-        }
     }
 }

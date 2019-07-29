@@ -1,9 +1,13 @@
 package io.github.krevik.kathairis.client.render.butterfly;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.krevik.kathairis.client.model.butterfly.ModelButterfly;
 import io.github.krevik.kathairis.entity.butterfly.EntityButterfly1;
 import io.github.krevik.kathairis.util.TextureLocationsRef;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -13,10 +17,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderButterfly1 extends RenderLiving<EntityButterfly1>
+public class RenderButterfly1 extends LivingRenderer<EntityButterfly1, ModelButterfly<EntityButterfly1>>
 {
     public static final Factory FACTORY = new Factory();
-    public RenderButterfly1(RenderManager renderManagerIn)
+    public RenderButterfly1(EntityRendererManager renderManagerIn)
     {
         super(renderManagerIn, new ModelButterfly(), 0F);
     }
@@ -31,7 +35,7 @@ public class RenderButterfly1 extends RenderLiving<EntityButterfly1>
     public static class Factory implements IRenderFactory<EntityButterfly1> {
 
         @Override
-        public Render<? super EntityButterfly1> createRenderFor(RenderManager manager) {
+        public EntityRenderer<? super EntityButterfly1> createRenderFor(EntityRendererManager manager) {
             return new RenderButterfly1(manager);
         }
 
@@ -42,7 +46,5 @@ public class RenderButterfly1 extends RenderLiving<EntityButterfly1>
     {
     	GlStateManager.scaled(0.2, 0.2, 0.2);
         super.applyRotations(entityLiving, p_77043_2_, rotationYaw, partialTicks);
-        
     }
-    
 }

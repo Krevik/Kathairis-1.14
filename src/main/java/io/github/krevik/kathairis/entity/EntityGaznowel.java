@@ -2,6 +2,7 @@ package io.github.krevik.kathairis.entity;
 
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -35,7 +36,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3d;
 
-public class EntityGaznowel extends EntityFlying implements IRangedAttackMob, IMob {
+public class EntityGaznowel extends FlyingEntity implements IRangedAttackMob, IMob {
 
     private static final DataParameter<Boolean> SWINGING_ARMS = EntityDataManager.createKey(EntityGaznowel.class, DataSerializers.BOOLEAN);
     private boolean hasMovementVector=false;

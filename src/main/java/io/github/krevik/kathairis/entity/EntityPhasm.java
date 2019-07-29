@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -32,7 +33,7 @@ import net.minecraft.world.gen.Heightmap;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class EntityPhasm extends EntityFlying implements IMob {
+public class EntityPhasm extends FlyingEntity implements IMob {
 
     private static final DataParameter<Boolean> SWINGING_ARMS = EntityDataManager.createKey(EntityPhasm.class, DataSerializers.BOOLEAN);
     public EntityPhasm(World worldIn)

@@ -1,9 +1,14 @@
 package io.github.krevik.kathairis.client.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.krevik.kathairis.client.model.ModelBison;
+import io.github.krevik.kathairis.entity.EntityBigTurtle;
 import io.github.krevik.kathairis.entity.EntityBison;
 import io.github.krevik.kathairis.util.TextureLocationsRef;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -13,12 +18,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderBison extends RenderLiving<EntityBison>
+public class RenderBison extends LivingRenderer<EntityBison, ModelBison<EntityBison>>
 {
-	
     public static final Factory FACTORY = new Factory();
 
-    public RenderBison(RenderManager renderManagerIn)
+    public RenderBison(EntityRendererManager renderManagerIn)
     {
         super(renderManagerIn, new ModelBison(), 1F);
     }
@@ -33,7 +37,7 @@ public class RenderBison extends RenderLiving<EntityBison>
     public static class Factory implements IRenderFactory<EntityBison> {
 
         @Override
-        public Render<? super EntityBison> createRenderFor(RenderManager manager) {
+        public EntityRenderer<? super EntityBison> createRenderFor(EntityRendererManager manager) {
             return new RenderBison(manager);
         }
 

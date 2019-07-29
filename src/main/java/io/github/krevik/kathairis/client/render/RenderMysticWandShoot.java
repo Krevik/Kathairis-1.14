@@ -1,7 +1,8 @@
-package io.github.krevik.kathairis.client.render;
+/*package io.github.krevik.kathairis.client.render;
 
 import io.github.krevik.kathairis.entity.EntityMysticWandShoot;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderMysticWandShoot extends Render<EntityMysticWandShoot> {
+public class RenderMysticWandShoot extends LivingRenderer<EntityMysticWandShoot, ModelMysticWantShoot> {
 
     public RenderMysticWandShoot(RenderManager p_i46176_1_) {
         super(p_i46176_1_);
@@ -41,4 +42,4 @@ public class RenderMysticWandShoot extends Render<EntityMysticWandShoot> {
         return null;
     }
 
-}
+}*/

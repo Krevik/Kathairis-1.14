@@ -1,29 +1,35 @@
 package io.github.krevik.kathairis.client.render.layer;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.krevik.kathairis.client.model.ModelGaznowel;
+import io.github.krevik.kathairis.entity.EntityGaznowel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.HandSide;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderLayerHeldItem implements LayerRenderer<EntityLivingBase>
+public class RenderLayerHeldItem implements LayerRenderer<EntityGaznowel, ModelGaznowel<EntityGaznowel>>
 {
-    protected final RenderLivingBase<?> livingEntityRenderer;
+    protected final LivingRenderer<EntityGaznowel, ModelGaznowel<EntityGaznowel>> livingEntityRenderer;
 
-    public RenderLayerHeldItem(RenderLivingBase<?> livingEntityRendererIn)
+    public RenderLayerHeldItem(LivingRenderer<EntityGaznowel, ModelGaznowel<EntityGaznowel>> livingEntityRendererIn)
     {
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    private void renderHeldItem(EntityLivingBase entityLiving, ItemStack stack, ItemCameraTransforms.TransformType transformType, EnumHandSide handSide)
+    private void renderHeldItem(LivingEntity entityLiving, ItemStack stack, ItemCameraTransforms.TransformType transformType, HandSide handSide)
     {
         if (!stack.isEmpty())
         {
@@ -39,8 +45,8 @@ public class RenderLayerHeldItem implements LayerRenderer<EntityLivingBase>
             boolean flag=false;
             GlStateManager.translatef((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
             GlStateManager.scaled(0.75f,0.75f,0.75f);
-            if(entityLiving instanceof EntityLiving){
-                EntityLiving entity = (EntityLiving) entityLiving;
+            if(entityLiving instanceof LivingEntity){
+                LivingEntity entity = (LivingEntity) entityLiving;
                 if(entity.getAttackTarget()!=null){
                     GlStateManager.translatef(-0.1F,-1.3F,0.4F);
                     GlStateManager.rotatef(45F, -4.0F, 0F, 0F);
@@ -54,15 +60,15 @@ public class RenderLayerHeldItem implements LayerRenderer<EntityLivingBase>
         }
     }
 
-    protected void translateToHand(EnumHandSide p_191361_1_)
+    protected void translateToHand(HandSide p_191361_1_)
     {
-        ((ModelGaznowel)this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, p_191361_1_);
+        ((ModelGaznowel)this.livingEntityRenderer.getEntityModel()).postRenderArm(0.0625F, p_191361_1_);
     }
 
 
     @Override
-    public void render(EntityLivingBase entitylivingbaseIn, float v, float v1, float v2, float v3, float v4, float v5, float v6) {
-        boolean flag = entitylivingbaseIn.getPrimaryHand() == EnumHandSide.RIGHT;
+    public void render(EntityGaznowel entitylivingbaseIn, float v, float v1, float v2, float v3, float v4, float v5, float v6) {
+        boolean flag = entitylivingbaseIn.getPrimaryHand() == HandSide.RIGHT;
         ItemStack itemstack = flag ? entitylivingbaseIn.getHeldItemOffhand() : entitylivingbaseIn.getHeldItemMainhand();
         ItemStack itemstack1 = flag ? entitylivingbaseIn.getHeldItemMainhand() : entitylivingbaseIn.getHeldItemOffhand();
 
@@ -70,15 +76,15 @@ public class RenderLayerHeldItem implements LayerRenderer<EntityLivingBase>
         {
             GlStateManager.pushMatrix();
 
-            if (this.livingEntityRenderer.getMainModel().isChild)
+            if (this.livingEntityRenderer.getEntityModel().isChild)
             {
                 float f = 0.5F;
                 GlStateManager.translatef(0.0F, 0.75F, 0.0F);
                 GlStateManager.scaled(0.5F, 0.5F, 0.5F);
             }
 
-            this.renderHeldItem(entitylivingbaseIn, itemstack1, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, EnumHandSide.RIGHT);
-            this.renderHeldItem(entitylivingbaseIn, itemstack, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, EnumHandSide.LEFT);
+            this.renderHeldItem(entitylivingbaseIn, itemstack1, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT);
+            this.renderHeldItem(entitylivingbaseIn, itemstack, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT);
             GlStateManager.popMatrix();
         }
     }

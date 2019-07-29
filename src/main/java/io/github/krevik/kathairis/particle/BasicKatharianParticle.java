@@ -2,6 +2,7 @@ package io.github.krevik.kathairis.particle;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -34,6 +35,7 @@ public class BasicKatharianParticle extends Particle {
     private Color finalColor = Color.WHITE;
     private float initialScale = 1.0F;
     private float finalScale = 1.0F;
+    private float particleScale = 1.0F;
 
     private boolean enableDepth;
 
@@ -195,8 +197,8 @@ public class BasicKatharianParticle extends Particle {
     }
 
     @Override
-    public int getFXLayer() {
-        return 3;
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.CUSTOM;
     }
 
     public BasicKatharianParticle setCanCollide(boolean canCollideIn) {

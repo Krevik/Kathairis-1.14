@@ -1,11 +1,13 @@
 package io.github.krevik.kathairis.entity.butterfly;
 
 import io.github.krevik.kathairis.block.BlockKathairisPlant;
+import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.passive.AmbientEntity;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -21,20 +23,21 @@ import net.minecraft.world.gen.Heightmap;
 
 import javax.annotation.Nullable;
 
-public class EntityBasicButterfly extends EntityAmbientCreature
+public class EntityBasicButterfly extends AmbientEntity
 {
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityBasicButterfly.class, DataSerializers.VARINT);
 
     private static final DataParameter<Byte> SITTING = EntityDataManager.createKey(EntityBasicButterfly.class, DataSerializers.BYTE);
     private BlockPos spawnPosition;
 
-    public EntityBasicButterfly(World worldIn, EntityType type)
+
+    public EntityBasicButterfly(World worldIn)
     {
-        super(type, worldIn);
-        this.setSize(0.6F, 0.5F);
+        super(ModEntities.COMMON_BUTTERFLY1, worldIn);
         this.setIsBirdSitting(true);
         this.experienceValue=1;
     }
+
 
     @Override
     public int getMaxSpawnedInChunk()

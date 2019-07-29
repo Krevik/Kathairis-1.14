@@ -1,12 +1,14 @@
 package io.github.krevik.kathairis.client.model;
 
 import io.github.krevik.kathairis.Kathairis;
+import io.github.krevik.kathairis.entity.EntityGaznowel;
 import io.github.krevik.kathairis.util.FunctionHelper;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -17,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 
 @OnlyIn(Dist.CLIENT)
-public class ModelGaznowel<T extends LivingEntity> extends EntityModel<T> {
+public class ModelGaznowel<T extends LivingEntity> extends EntityModel<EntityGaznowel> {
     public RendererModel Cloud1;
     public RendererModel Body2;
     public RendererModel Body1;
@@ -146,7 +148,7 @@ public class ModelGaznowel<T extends LivingEntity> extends EntityModel<T> {
     }
 
     @Override
-    public void render(T entity, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void render(EntityGaznowel entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.RightLeg1.render(f5);
         this.Body2.render(f5);
         this.LeftLeg1.render(f5);
@@ -185,7 +187,7 @@ public class ModelGaznowel<T extends LivingEntity> extends EntityModel<T> {
     float distanceFromCenterMultiplier=0.05f;
 
     @Override
-    public void setRotationAngles(T entity, float limbSwing, float limbSwingAmount, float age, float f3, float f4, float f5 ) {
+    public void setRotationAngles(EntityGaznowel entity, float limbSwing, float limbSwingAmount, float age, float f3, float f4, float f5 ) {
         super.setRotationAngles(entity, limbSwing, limbSwingAmount, age, f3, f4, f5);
         initCloudsInPlace();
         //clouds
@@ -209,8 +211,7 @@ public class ModelGaznowel<T extends LivingEntity> extends EntityModel<T> {
         Cloud6.offsetZ=cloudBasePositionZ[6];
 
 
-            LivingEntity living = (LivingEntity) entity;
-            if(living.getAttackTarget()!=null){
+            if(entity.getAttackTarget()!=null){
                 RightArm1.rotateAngleX=helper.degToRad(-52.35f);
                 RightArm1.rotateAngleY=helper.degToRad(-17.84f);
                 RightArm1.rotateAngleZ=helper.degToRad(25f);
@@ -258,13 +259,14 @@ public class ModelGaznowel<T extends LivingEntity> extends EntityModel<T> {
 
     }
 
-    public void postRenderArm(float scale, EnumHandSide side)
+    public void postRenderArm(float scale, HandSide side)
     {
         this.getArmForSide(side).postRender(scale);
     }
-    protected RendererModel getArmForSide(EnumHandSide side)
+
+    protected RendererModel getArmForSide(HandSide side)
     {
-        return side == EnumHandSide.LEFT ? this.LeftArm1 : this.RightArm1;
+        return side == HandSide.LEFT ? this.LeftArm1 : this.RightArm1;
     }
 
 }

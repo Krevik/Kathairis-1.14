@@ -2,7 +2,11 @@ package io.github.krevik.kathairis.client.render;
 
 import io.github.krevik.kathairis.client.model.ModelCactiSpore;
 import io.github.krevik.kathairis.entity.EntityCactiSpore;
+import io.github.krevik.kathairis.entity.butterfly.EntityCloudShimmer;
 import io.github.krevik.kathairis.util.TextureLocationsRef;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -12,12 +16,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderCactiSpore extends RenderLiving<EntityCactiSpore>
+public class RenderCactiSpore extends LivingRenderer<EntityCactiSpore,ModelCactiSpore<EntityCactiSpore>>
 {
 
     public static final Factory FACTORY = new Factory();
 
-    public RenderCactiSpore(RenderManager renderManagerIn)
+    public RenderCactiSpore(EntityRendererManager renderManagerIn)
     {
         super(renderManagerIn, new ModelCactiSpore(), 0F);
     }
@@ -32,7 +36,7 @@ public class RenderCactiSpore extends RenderLiving<EntityCactiSpore>
     public static class Factory implements IRenderFactory<EntityCactiSpore> {
 
         @Override
-        public Render<? super EntityCactiSpore> createRenderFor(RenderManager manager) {
+        public EntityRenderer<? super EntityCactiSpore> createRenderFor(EntityRendererManager manager) {
             return new RenderCactiSpore(manager);
         }
 
