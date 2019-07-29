@@ -2,14 +2,10 @@ package io.github.krevik.kathairis.client.render;
 
 import io.github.krevik.kathairis.client.model.ModelCactiSpore;
 import io.github.krevik.kathairis.entity.EntityCactiSpore;
-import io.github.krevik.kathairis.entity.butterfly.EntityCloudShimmer;
 import io.github.krevik.kathairis.util.TextureLocationsRef;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

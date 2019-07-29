@@ -2,9 +2,13 @@ package io.github.krevik.kathairis.entity.ai;
 
 import io.github.krevik.kathairis.entity.EntityCloudOister;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
-public class EntityAICloudOisterPanic extends EntityAIBase
+import java.util.EnumSet;
+
+public class EntityAICloudOisterPanic extends Goal
 {
     protected final EntityCloudOister creature;
     protected double speed;
@@ -13,7 +17,7 @@ public class EntityAICloudOisterPanic extends EntityAIBase
     {
         this.creature = creature;
         this.speed = speedIn;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.TARGET));
     }
 
     @Override

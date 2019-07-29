@@ -2,7 +2,6 @@ package io.github.krevik.kathairis.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemTool;
 import net.minecraft.item.ToolItem;
 
 import java.util.Set;

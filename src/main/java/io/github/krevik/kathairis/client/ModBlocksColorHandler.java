@@ -2,12 +2,10 @@ package io.github.krevik.kathairis.client;
 
 import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
-import net.minecraft.world.IWorldReaderBase;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

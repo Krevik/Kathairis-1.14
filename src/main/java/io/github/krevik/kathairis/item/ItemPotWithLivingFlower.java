@@ -1,14 +1,11 @@
 package io.github.krevik.kathairis.item;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.EnumActionResult;
 
 /**
  * @author Krevik

@@ -1,10 +1,7 @@
 package io.github.krevik.kathairis.item;
 
 import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import org.apache.commons.lang3.tuple.Pair;
 

@@ -8,7 +8,6 @@ import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
