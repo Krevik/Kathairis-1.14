@@ -3,19 +3,16 @@ package io.github.krevik.kathairis.block;
 import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -24,8 +21,11 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BlockForestCandle extends BlockKathairisPlant {
@@ -66,7 +66,7 @@ public class BlockForestCandle extends BlockKathairisPlant {
             }
         }else{
             if(state==ModBlocks.FOREST_CANDLE.getDefaultState()){
-                if(world.getBlockState(pos.up())!=ModBlocks.FOREST_CANDLE.getDefaultState().with(VARIANT, BlockForestCandle.EnumType.UPPER)&&world.getBlockState(pos.up()).getBlock()!=Blocks.AIR){
+                if(world.getBlockState(pos.up())!=ModBlocks.FOREST_CANDLE.getDefaultState().with(VARIANT, BlockForestCandle.EnumType.UPPER)&&world.getBlockState(pos.up()).getBlock()!= Blocks.AIR){
                     world.removeBlock(pos,false);
                 }
             }else{
@@ -106,13 +106,13 @@ public class BlockForestCandle extends BlockKathairisPlant {
     }
 
     @Override
-    public void onBlockAdded(BlockState p_196259_1_, World wo, BlockPos pos, BlockState p_196259_4_) {
+    public void onBlockAdded(BlockState p_196259_1_, World wo, BlockPos pos, BlockState p_196259_4_, boolean isMoving) {
         if(p_196259_1_==ModBlocks.FOREST_CANDLE.getDefaultState()) {
             if (wo.isAirBlock(pos.up())) {
                 wo.setBlockState(pos.up(), ModBlocks.FOREST_CANDLE.getDefaultState().with(VARIANT, BlockForestCandle.EnumType.UPPER));
             }
         }
-        super.onBlockAdded(p_196259_1_, wo, pos, p_196259_4_);
+        super.onBlockAdded(p_196259_1_, wo, pos, p_196259_4_, isMoving);
     }
 
     @Override
@@ -124,15 +124,6 @@ public class BlockForestCandle extends BlockKathairisPlant {
             world.destroyBlock(pos.up(),false);
         }
         super.onBlockHarvested(world,pos,state,player);
-    }
-
-    @Override
-    public int getItemsToDropCount(BlockState state, int p_196251_2_, World p_196251_3_, BlockPos p_196251_4_, Random p_196251_5_) {
-        if(state==ModBlocks.FOREST_CANDLE.getDefaultState()){
-            return 1;
-        }else{
-            return 0;
-        }
     }
 
     @Override

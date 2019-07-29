@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
@@ -31,19 +32,14 @@ public class BlockBaurble extends Block {
 	}
 
 	private void dropIfNotValidPosition(final BlockState state, final World worldIn, final BlockPos pos) {
-		if (!worldIn.getBlockState(pos.up()).isFullCube()) {
+		if (!worldIn.getBlockState(pos.up()).isSolid()) {
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 1 | 2);
 			spawnAsEntity(worldIn, pos, new ItemStack(this));
 		}
 	}
 
 	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public VoxelShape getShape(BlockState p_196244_1_, IBlockReader p_196244_2_, BlockPos p_196244_3_) {
+	public VoxelShape getShape(BlockState p_196244_1_, IBlockReader p_196244_2_, BlockPos p_196244_3_, ISelectionContext context) {
 		return VoxelShapes.create(BAURBLE_AABB);
 	}
 
@@ -53,7 +49,7 @@ public class BlockBaurble extends Block {
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		dropIfNotValidPosition(state, worldIn, pos);
 	}
 

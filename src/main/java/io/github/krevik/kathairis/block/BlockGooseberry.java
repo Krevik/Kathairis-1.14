@@ -5,23 +5,19 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -44,11 +40,6 @@ public class BlockGooseberry extends Block {
 	}
 
 	@Override
-	public boolean isFullCube(BlockState p_149686_1_) {
-		return false;
-	}
-
-	@Override
 	public void tick(BlockState state, World world, BlockPos pos, Random random) {
 		super.tick(state, world, pos, random);
 		if (!world.isRemote) {
@@ -56,11 +47,6 @@ public class BlockGooseberry extends Block {
 				world.setBlockState(pos, GOOSEBERRY_BUSH.getDefaultState().with(VARIANT, EnumType.WITH));
 			}
 		}
-	}
-
-	@Override
-	public void dropBlockAsItemWithChance(BlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
-
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -71,11 +57,11 @@ public class BlockGooseberry extends Block {
 
 	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		return (worldIn.getLightSubtracted(pos, 0) >= 8 || worldIn.canSeeSky(pos)) && isValidGround(worldIn.getBlockState(pos.down()), worldIn, pos.down());
+		return (worldIn.getLightSubtracted(pos, 0) >= 8 || worldIn.canBlockSeeSky(pos)) && isValidGround(worldIn.getBlockState(pos.down()), worldIn, pos.down());
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, net.minecraft.util.EnumHand hand, Direction facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand p_220051_5_, BlockRayTraceResult p_220051_6_) {
 		boolean result = false;
 		if (state == GOOSEBERRY_BUSH.getDefaultState().with(VARIANT, EnumType.WITH)) {
 			player.addItemStackToInventory(new ItemStack(GOOSEBERRIES, 1 + player.getRNG().nextInt(5)));
@@ -85,16 +71,17 @@ public class BlockGooseberry extends Block {
 		return result;
 	}
 
+
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		Random random = new Random();
 		if (state == GOOSEBERRY_BUSH.getDefaultState().with(VARIANT, EnumType.WITH)) {
 			for (int c = 0; c < (2 + random.nextInt(4)); c++) {
-				ItemEntity is = new ItemEntity(world);
+				ItemEntity is = new ItemEntity(world,pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 				is.setItem(new ItemStack(GOOSEBERRIES));
 				is.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 				if (!world.isRemote) {
-					world.spawnEntity(is);
+					world.addEntity(is);
 				}
 			}
 		}
@@ -104,11 +91,6 @@ public class BlockGooseberry extends Block {
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(VARIANT);
-	}
-
-	@Override
-	public boolean doesSideBlockRendering(BlockState state, IWorldReader world, BlockPos pos, Direction face) {
-		return true;
 	}
 
 	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {

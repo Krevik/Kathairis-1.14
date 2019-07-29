@@ -1,10 +1,8 @@
 package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SandBlock;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 

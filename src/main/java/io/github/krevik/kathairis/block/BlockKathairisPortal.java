@@ -7,28 +7,23 @@ import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.init.ModParticles;
 import io.github.krevik.kathairis.world.dimension.KathairisTeleportingManager;
 import net.minecraft.block.*;
-import net.minecraft.block.BlockPortal;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockWorldState;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
@@ -37,7 +32,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.antlr.v4.runtime.atn.BlockStartState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -61,7 +55,7 @@ public class BlockKathairisPortal extends NetherPortalBlock {
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getCollisionShape(BlockState p_220071_1_, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_) {
 		return VoxelShapes.empty();
 	}
 
@@ -160,7 +154,7 @@ public class BlockKathairisPortal extends NetherPortalBlock {
     }
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		switch (state.get(AXIS)) {
 			case Z:
 				return Z_AABB;
@@ -185,7 +179,7 @@ public class BlockKathairisPortal extends NetherPortalBlock {
                     if(worldIn.isAirBlock(new BlockPos(X,Y,Z))&&worldIn.isAirBlock(new BlockPos(X,Y,Z).up())) {
                         EntityStrangeWanderer esw = new EntityStrangeWanderer(worldIn);
                         esw.setPosition(X,Y,Z);
-                        worldIn.spawnEntity(esw);
+                        worldIn.addEntity(esw);
                     }
 
                 }
@@ -198,11 +192,6 @@ public class BlockKathairisPortal extends NetherPortalBlock {
             }
         }
 
-	}
-
-	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
 	}
 
 	@Override
@@ -221,11 +210,6 @@ public class BlockKathairisPortal extends NetherPortalBlock {
 		Direction.Axis enumfacing$axis1 = stateIn.get(AXIS);
 		boolean flag = enumfacing$axis1 != enumfacing$axis && enumfacing$axis.isHorizontal();
 		return !flag && facingState.getBlock() != this && !(new Size(worldIn, currentPos, enumfacing$axis1)).func_208508_f() ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-	}
-
-	@Override
-	public int quantityDropped(BlockState state, Random random) {
-		return 0;
 	}
 
 	@Override
@@ -287,49 +271,44 @@ public class BlockKathairisPortal extends NetherPortalBlock {
 
 	@Override
 	public BlockPattern.PatternHelper createPatternHelper(IWorld worldIn, BlockPos p_181089_2_) {
-		Direction.Axis enumfacing$axis = Direction.Axis.Z;
-		Size blockportal$size = new Size(worldIn, p_181089_2_, Direction.Axis.X);
-		LoadingCache<BlockPos, BlockWorldState> loadingcache = BlockPattern.createLoadingCache(worldIn, true);
-		if (!blockportal$size.isValid()) {
-			enumfacing$axis = EnumFacing.Axis.X;
-			blockportal$size = new Size(worldIn, p_181089_2_, EnumFacing.Axis.Z);
+		Direction.Axis direction$axis = Direction.Axis.Z;
+		BlockKathairisPortal.Size netherportalblock$size = new BlockKathairisPortal.Size(worldIn, p_181089_2_, Direction.Axis.X);
+		LoadingCache<BlockPos, CachedBlockInfo> loadingcache = BlockPattern.createLoadingCache(worldIn, true);
+		if (!netherportalblock$size.isValid()) {
+			direction$axis = Direction.Axis.X;
+			netherportalblock$size = new BlockKathairisPortal.Size(worldIn, p_181089_2_, Direction.Axis.Z);
 		}
 
-		if (!blockportal$size.isValid()) {
-			return new BlockPattern.PatternHelper(p_181089_2_, EnumFacing.NORTH, EnumFacing.UP, loadingcache, 1, 1, 1);
+		if (!netherportalblock$size.isValid()) {
+			return new BlockPattern.PatternHelper(p_181089_2_, Direction.NORTH, Direction.UP, loadingcache, 1, 1, 1);
 		} else {
-			int[] aint = new int[EnumFacing.AxisDirection.values().length];
-			EnumFacing enumfacing = blockportal$size.rightDir.rotateYCCW();
-			BlockPos blockpos = blockportal$size.bottomLeft.up(blockportal$size.getHeight() - 1);
+			int[] aint = new int[Direction.AxisDirection.values().length];
+			Direction direction = netherportalblock$size.rightDir.rotateYCCW();
+			BlockPos blockpos = netherportalblock$size.bottomLeft.up(netherportalblock$size.getHeight() - 1);
 
-			for (EnumFacing.AxisDirection enumfacing$axisdirection : EnumFacing.AxisDirection.values()) {
-				BlockPattern.PatternHelper blockpattern$patternhelper = new BlockPattern.PatternHelper(enumfacing.getAxisDirection() == enumfacing$axisdirection ? blockpos : blockpos.offset(blockportal$size.rightDir, blockportal$size.getWidth() - 1), EnumFacing.getFacingFromAxis(enumfacing$axisdirection, enumfacing$axis), EnumFacing.UP, loadingcache, blockportal$size.getWidth(), blockportal$size.getHeight(), 1);
+			for(Direction.AxisDirection direction$axisdirection : Direction.AxisDirection.values()) {
+				BlockPattern.PatternHelper blockpattern$patternhelper = new BlockPattern.PatternHelper(direction.getAxisDirection() == direction$axisdirection ? blockpos : blockpos.offset(netherportalblock$size.rightDir, netherportalblock$size.getWidth() - 1), Direction.getFacingFromAxis(direction$axisdirection, direction$axis), Direction.UP, loadingcache, netherportalblock$size.getWidth(), netherportalblock$size.getHeight(), 1);
 
-				for (int i = 0; i < blockportal$size.getWidth(); ++i) {
-					for (int j = 0; j < blockportal$size.getHeight(); ++j) {
-						BlockWorldState blockworldstate = blockpattern$patternhelper.translateOffset(i, j, 1);
-						if (!blockworldstate.getBlockState().isAir()) {
-							++aint[enumfacing$axisdirection.ordinal()];
+				for(int i = 0; i < netherportalblock$size.getWidth(); ++i) {
+					for(int j = 0; j < netherportalblock$size.getHeight(); ++j) {
+						CachedBlockInfo cachedblockinfo = blockpattern$patternhelper.translateOffset(i, j, 1);
+						if (!cachedblockinfo.getBlockState().isAir()) {
+							++aint[direction$axisdirection.ordinal()];
 						}
 					}
 				}
 			}
 
-			EnumFacing.AxisDirection enumfacing$axisdirection1 = EnumFacing.AxisDirection.POSITIVE;
+			Direction.AxisDirection direction$axisdirection1 = Direction.AxisDirection.POSITIVE;
 
-			for (EnumFacing.AxisDirection enumfacing$axisdirection2 : EnumFacing.AxisDirection.values()) {
-				if (aint[enumfacing$axisdirection2.ordinal()] < aint[enumfacing$axisdirection1.ordinal()]) {
-					enumfacing$axisdirection1 = enumfacing$axisdirection2;
+			for(Direction.AxisDirection direction$axisdirection2 : Direction.AxisDirection.values()) {
+				if (aint[direction$axisdirection2.ordinal()] < aint[direction$axisdirection1.ordinal()]) {
+					direction$axisdirection1 = direction$axisdirection2;
 				}
 			}
 
-			return new BlockPattern.PatternHelper(enumfacing.getAxisDirection() == enumfacing$axisdirection1 ? blockpos : blockpos.offset(blockportal$size.rightDir, blockportal$size.getWidth() - 1), EnumFacing.getFacingFromAxis(enumfacing$axisdirection1, enumfacing$axis), EnumFacing.UP, loadingcache, blockportal$size.getWidth(), blockportal$size.getHeight(), 1);
+			return new BlockPattern.PatternHelper(direction.getAxisDirection() == direction$axisdirection1 ? blockpos : blockpos.offset(netherportalblock$size.rightDir, netherportalblock$size.getWidth() - 1), Direction.getFacingFromAxis(direction$axisdirection1, direction$axis), Direction.UP, loadingcache, netherportalblock$size.getWidth(), netherportalblock$size.getHeight(), 1);
 		}
-	}
-
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
-		return BlockFaceShape.UNDEFINED;
 	}
 
 	@Nullable
@@ -343,7 +322,7 @@ public class BlockKathairisPortal extends NetherPortalBlock {
 		}
 	}
 
-	public static class Size {
+	public static class Size extends NetherPortalBlock.Size {
 
 		private final IWorld world;
 		private final Direction.Axis axis;
@@ -355,6 +334,7 @@ public class BlockKathairisPortal extends NetherPortalBlock {
 		private int width;
 
 		public Size(IWorld p_i48740_1_, BlockPos p_i48740_2_, Direction.Axis p_i48740_3_) {
+			super(p_i48740_1_,p_i48740_2_,p_i48740_3_);
 			this.world = p_i48740_1_;
 			this.axis = p_i48740_3_;
 			if (p_i48740_3_ == Direction.Axis.X) {

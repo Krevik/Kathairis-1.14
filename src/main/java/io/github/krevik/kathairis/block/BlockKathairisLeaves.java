@@ -1,15 +1,11 @@
 package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.*;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -73,7 +69,7 @@ public class BlockKathairisLeaves extends LeavesBlock {
 	@Override
 	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
 		if (!state.get(PERSISTENT) && state.get(DISTANCE) == 7) {
-			worldIn.removeBlock(pos);
+			worldIn.removeBlock(pos,false);
 		}
 
 	}
@@ -91,11 +87,6 @@ public class BlockKathairisLeaves extends LeavesBlock {
 		}
 
 		return stateIn;
-	}
-
-	@Override
-	public IItemProvider getItemDropped(BlockState p_199769_1_, World p_199769_2_, BlockPos p_199769_3_, int p_199769_4_) {
-		return new ItemStack(this).getItem();
 	}
 
 	@Override

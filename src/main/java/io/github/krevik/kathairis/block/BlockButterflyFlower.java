@@ -4,8 +4,6 @@ import io.github.krevik.kathairis.entity.butterfly.EntityButterfly;
 import io.github.krevik.kathairis.entity.butterfly.EntityButterfly1;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;

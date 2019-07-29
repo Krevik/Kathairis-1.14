@@ -4,11 +4,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.krevik.kathairis.Kathairis;
 import io.github.krevik.kathairis.entity.EntityHowler;
 import io.github.krevik.kathairis.util.FunctionHelper;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.client.renderer.entity.model.RendererModel;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 

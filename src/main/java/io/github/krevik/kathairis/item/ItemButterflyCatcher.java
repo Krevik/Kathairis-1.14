@@ -1,7 +1,7 @@
 package io.github.krevik.kathairis.item;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ public class ItemButterflyCatcher extends Item {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
         /*
         if(entity instanceof EntityBasicButterfly){
             EntityBasicButterfly butterfly = (EntityBasicButterfly) entity;

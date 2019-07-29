@@ -2,11 +2,14 @@ package io.github.krevik.kathairis.item;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
@@ -24,15 +27,15 @@ public class ItemFungalDrug extends ItemKathairisFood {
 
 	@Override
 	//TODO REMOVE SOME BAD EFFECTS
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+		if (entityLiving instanceof PlayerEntity) {
+			PlayerEntity entityplayer = (PlayerEntity) entityLiving;
 			entityplayer.getFoodStats().addStats(this, stack);
 			worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			this.onFoodEaten(stack, worldIn, entityplayer);
 			entityplayer.addStat(StatList.ITEM_USED.get(this));
 			//nausea effect
-			entityplayer.addPotionEffect(new PotionEffect(Potion.getPotionById(9), 400, 3));
+			entityplayer.addPotionEffect(new EffectInstance(Potion.getPotionById(9), 400, 3));
 			if (entityplayer instanceof EntityPlayerMP) {
 				CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) entityplayer, stack);
 			}

@@ -5,25 +5,20 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -40,7 +35,7 @@ import static io.github.krevik.kathairis.init.ModBlocks.GLOWVINES;
 public class BlockGlowVines extends BlockKathairisPlant {
 
 	public static final EnumProperty<EnumType> VARIANT = EnumProperty.create("variant", EnumType.class);
-	public static final DirectionProperty FACING = BlockHorizontal.HORIZONTAL_FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	public BlockGlowVines() {
 		super(Block.Properties.create(Material.PLANTS).hardnessAndResistance(0).sound(SoundType.PLANT).tickRandomly().doesNotBlockMovement().lightValue(5));
@@ -49,16 +44,16 @@ public class BlockGlowVines extends BlockKathairisPlant {
 
 	public static boolean canPlaceBlockAtStatic(IWorldReader worldIn, BlockPos pos) {
 		boolean can = false;
-		if (!worldIn.isAirBlock(pos.east()) && worldIn.getBlockState(pos.east()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.east()) && worldIn.getBlockState(pos.east()).isSolid()) {
 			can = true;
 		}
-		if (!worldIn.isAirBlock(pos.west()) && worldIn.getBlockState(pos.west()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.west()) && worldIn.getBlockState(pos.west()).isSolid()) {
 			can = true;
 		}
-		if (!worldIn.isAirBlock(pos.south()) && worldIn.getBlockState(pos.south()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.south()) && worldIn.getBlockState(pos.south()).isSolid()) {
 			can = true;
 		}
-		if (!worldIn.isAirBlock(pos.north()) && worldIn.getBlockState(pos.north()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.north()) && worldIn.getBlockState(pos.north()).isSolid()) {
 			can = true;
 		}
 		if (!worldIn.isAirBlock(pos.up())) {
@@ -103,11 +98,6 @@ public class BlockGlowVines extends BlockKathairisPlant {
 		}
 		handleFacing(worldIn, pos, state);
 		handleVariants(worldIn, pos, state);
-	}
-
-	@Override
-	public void dropBlockAsItemWithChance(BlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
-
 	}
 
 	@Override
@@ -193,7 +183,7 @@ public class BlockGlowVines extends BlockKathairisPlant {
 					if (upperVariant == EnumType.BOTTOM) {
 						world.destroyBlock(pos, true);
 					}
-					if (world.getBlockState(pos.down(2)).isFullCube() || world.getBlockState(pos.down()).isFullCube()) {
+					if (world.getBlockState(pos.down(2)).isSolid() || world.getBlockState(pos.down()).isSolid()) {
 						world.setBlockState(pos, state.with(VARIANT, EnumType.BOTTOM));
 					}
 				}
@@ -208,16 +198,16 @@ public class BlockGlowVines extends BlockKathairisPlant {
 
 	public boolean canPlaceBlockAt(IWorldReader worldIn, BlockPos pos) {
 		boolean can = false;
-		if (!worldIn.isAirBlock(pos.east()) && worldIn.getBlockState(pos.east()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.east()) && worldIn.getBlockState(pos.east()).isSolid()) {
 			can = true;
 		}
-		if (!worldIn.isAirBlock(pos.west()) && worldIn.getBlockState(pos.west()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.west()) && worldIn.getBlockState(pos.west()).isSolid()) {
 			can = true;
 		}
-		if (!worldIn.isAirBlock(pos.south()) && worldIn.getBlockState(pos.south()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.south()) && worldIn.getBlockState(pos.south()).isSolid()) {
 			can = true;
 		}
-		if (!worldIn.isAirBlock(pos.north()) && worldIn.getBlockState(pos.north()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.north()) && worldIn.getBlockState(pos.north()).isSolid()) {
 			can = true;
 		}
 		if (!worldIn.isAirBlock(pos.up())) {

@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,12 +18,6 @@ public class BlockKathairisStone extends Block {
 
 	public BlockKathairisStone() {
 		super(Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2.5f, 2.5f));
-	}
-
-	@Nonnull
-	@Override
-	public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
-		return ModBlocks.KATHAIRIS_COBBLESTONE;
 	}
 
 }

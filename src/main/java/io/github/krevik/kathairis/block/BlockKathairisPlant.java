@@ -1,14 +1,14 @@
 package io.github.krevik.kathairis.block;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
@@ -43,14 +43,10 @@ public class BlockKathairisPlant extends Block implements net.minecraftforge.com
 	}
 
 	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
 		return SHAPE;
 	}
+
 
 	@Override
 	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
@@ -58,12 +54,13 @@ public class BlockKathairisPlant extends Block implements net.minecraftforge.com
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_) {
-		super.neighborChanged(state, world, pos, p_189540_4_, p_189540_5_);
+	public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos blockPos, boolean isMoving) {
+		super.neighborChanged(state, world, pos, block, blockPos,isMoving);
 		if (!isValidPosition(state, world, pos) || !world.isAirBlock(pos.up())) {
-			world.removeBlock(pos);
+			world.removeBlock(pos,isMoving);
 		}
 	}
+
 
 	@Nonnull
 	@Override

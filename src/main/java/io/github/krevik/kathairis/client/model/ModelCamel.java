@@ -2,11 +2,8 @@ package io.github.krevik.kathairis.client.model;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.krevik.kathairis.entity.EntityCamel;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.client.renderer.entity.model.RendererModel;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 

@@ -2,7 +2,6 @@ package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -28,27 +27,8 @@ public class BlockKathairisOre extends Block {
 	}
 
 	@Override
-	public int quantityDropped(BlockState state, Random random) {
-		return amountOfDroppedItems;
-	}
-
-	@Override
-	public void dropBlockAsItemWithChance(BlockState state, World worldIn, BlockPos pos, float chancePerItem, int fortune) {
-		super.dropBlockAsItemWithChance(state, worldIn, pos, chancePerItem, fortune);
-	}
-
-	@Override
 	public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
 		return new ItemStack(this);
-	}
-
-	@Override
-	public int getExpDrop(BlockState state, net.minecraft.world.IWorldReader reader, BlockPos pos, int fortune) {
-		World world = reader instanceof World ? (World) reader : null;
-		if (world == null || this.getItemDropped(state, world, pos, fortune) != this) {
-			return MathHelper.nextInt(this.RANDOM, this.minXp, this.maxXp);
-		}
-		return 0;
 	}
 
 }

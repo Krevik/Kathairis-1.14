@@ -3,12 +3,9 @@ package io.github.krevik.kathairis.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.IWorldReaderBase;
 
 import static io.github.krevik.kathairis.init.ModBlocks.*;
 

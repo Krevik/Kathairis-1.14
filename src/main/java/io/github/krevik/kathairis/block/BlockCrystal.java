@@ -6,10 +6,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -19,9 +18,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static io.github.krevik.kathairis.init.ModBlocks.*;
@@ -59,8 +60,7 @@ public class BlockCrystal extends Block {
 
 	public static boolean isValidGround1(BlockState state){
 		boolean is=false;
-		Block groundBlock = state.getBlock();
-		if(groundBlock.isFullCube(state) && groundBlock.isTopSolid(state)){
+		if(state.isSolid()){
 			is=true;
 		}
 		return is;
@@ -77,35 +77,8 @@ public class BlockCrystal extends Block {
 	}
 
 	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
-	}
-
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
-		return BlockFaceShape.UNDEFINED;
-	}
-
-	@Override
 	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return 1;
-	}
-
-	@Override
-	public int quantityDropped(BlockState state, Random random) {
-		return MathHelper.nextInt(random, 1, 3);
-	}
-
-	@Override
-	public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
-		if (state.getBlock() == BLUE_CRYSTAL) {
-			return CRYSTAL_SHARD_BLUE;
-		} else if (state.getBlock() == VIOLET_CRYSTAL) {
-			return CRYSTAL_SHARD_VIOLET;
-		} else if (state.getBlock() == YELLOW_CRYSTAL) {
-			return CRYSTAL_SHARD_YELLOW;
-		} else {
-			return CRYSTAL_SHARD_BLUE;
-		}
 	}
 
 	@Override
@@ -168,8 +141,7 @@ public class BlockCrystal extends Block {
 
 	public boolean isValidGround(BlockState state) {
 		boolean is = false;
-		Block groundBlock = state.getBlock();
-		if (groundBlock.isFullCube(state) && groundBlock.isTopSolid(state)) {
+		if (state.isSolid()) {
 			is = true;
 		}
 		return is;

@@ -5,16 +5,19 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Krevik
@@ -22,12 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockCondensedCloud extends Block {
 
 	public BlockCondensedCloud() {
-		super(Block.Properties.create(Material.CLOTH).hardnessAndResistance(1f, 1f).sound(SoundType.CLOTH));
-	}
-
-	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
+		super(Block.Properties.create(Material.WOOL).hardnessAndResistance(1f, 1f).sound(SoundType.CLOTH));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -36,18 +34,9 @@ public class BlockCondensedCloud extends Block {
 		return adjacentBlockState.getBlock() == this || super.isSideInvisible(state, adjacentBlockState, side);
 	}
 
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
-		return BlockFaceShape.UNDEFINED;
-	}
-
 	@Override
 	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return 1;
-	}
-
-	@Override
-	public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
-		return this;
 	}
 
 	@Override

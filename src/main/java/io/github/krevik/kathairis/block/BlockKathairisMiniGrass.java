@@ -1,10 +1,7 @@
 package io.github.krevik.kathairis.block;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
@@ -15,8 +12,12 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraftforge.common.IShearable;
 
 import javax.annotation.Nullable;
+
+import java.util.List;
 
 import static io.github.krevik.kathairis.init.ModBlocks.KATHAIRIS_MINI_GRASS;
 
@@ -29,11 +30,6 @@ public class BlockKathairisMiniGrass extends BlockKathairisPlant {
 
 	public BlockKathairisMiniGrass() {
 		super();
-	}
-
-	@Override
-	public IItemProvider getItemDropped(BlockState state, World worldIn, BlockPos pos, int fortune) {
-		return null;
 	}
 
 	@Override

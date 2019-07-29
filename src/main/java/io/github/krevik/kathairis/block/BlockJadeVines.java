@@ -5,15 +5,10 @@ import io.github.krevik.kathairis.util.networking.packets.PacketServerPlayerUseJ
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -24,7 +19,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,7 +67,7 @@ public class BlockJadeVines extends BlockKathairisPlant {
 	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		boolean can = false;
-		if (!worldIn.isAirBlock(pos.up()) && worldIn.getBlockState(pos.up()).isFullCube()) {
+		if (!worldIn.isAirBlock(pos.up()) && worldIn.getBlockState(pos.up()).isSolid()) {
 			can = true;
 		}
 		if (worldIn.getBlockState(pos.up()).getBlock() instanceof BlockJadeVines) {
@@ -161,11 +155,6 @@ public class BlockJadeVines extends BlockKathairisPlant {
 				worldIn.destroyBlock(pos, true);
 			}
 		}
-	}
-
-	@Override
-	public void dropBlockAsItemWithChance(BlockState p_196255_1_, World p_196255_2_, BlockPos p_196255_3_, float p_196255_4_, int p_196255_5_) {
-
 	}
 
 	@Override

@@ -1,13 +1,10 @@
 package io.github.krevik.kathairis.block;
 
-import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -16,7 +13,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.IWorldReaderBase;
 
 import static io.github.krevik.kathairis.init.ModBlocks.KATHAIRIS_DIRT;
 import static io.github.krevik.kathairis.init.ModBlocks.KATHAIRIS_GRASS;

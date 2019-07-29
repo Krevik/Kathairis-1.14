@@ -1,9 +1,11 @@
 package io.github.krevik.kathairis.block;
 
+import io.github.krevik.kathairis.Kathairis;
+import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.init.ModItems;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
@@ -12,20 +14,21 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static io.github.krevik.kathairis.init.ModBlocks.BRINE_PUSTULE;
@@ -35,7 +38,7 @@ import static io.github.krevik.kathairis.init.ModBlocks.BRINE_PUSTULE;
  */
 public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable {
 
-    public static final DirectionProperty FACING = BlockHorizontal.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty AGE = BlockStateProperties.STAGE_0_1;
 
 
@@ -69,13 +72,13 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
         Direction facing = context.getFace();
         World world = context.getWorld();
         BlockPos pos = context.getPos();
-        if (isStone(world.getBlockState(pos.east()).getBlock())) {
+        if (isStone(world.getBlockState(pos.east()))) {
             return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.EAST);
-        } else if (isStone(world.getBlockState(pos.west()).getBlock())) {
+        } else if (isStone(world.getBlockState(pos.west()))) {
             return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.WEST);
-        } else if (isStone(world.getBlockState(pos.south()).getBlock())) {
+        } else if (isStone(world.getBlockState(pos.south()))) {
             return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.SOUTH);
-        } else if (isStone(world.getBlockState(pos.north()).getBlock())) {
+        } else if (isStone(world.getBlockState(pos.north()))) {
             return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.NORTH);
         } else {
             return BRINE_PUSTULE.getDefaultState().with(FACING, Direction.WEST);
@@ -97,9 +100,10 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
         blockPoses.add(pos.north());
         blockPoses.add(pos.south());
 
+
         for(BlockPos poses:blockPoses){
             BlockState state = worldIn.getBlockState(poses);
-            if(state.getBlock() instanceof BlockKathairisStone || state.getBlock() instanceof BlockStone){
+            if(state.getBlock() instanceof BlockKathairisStone || state.getMaterial() == Material.ROCK){
                 is=true;
             }
         }
@@ -113,17 +117,8 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
     }
 
     @Override
-    public IItemProvider getItemDropped(BlockState state, World world, BlockPos pos, int fortune) {
-            return ModItems.MINERAL_FRUIT;
-    }
-
-    @Override
-    public int getItemsToDropCount(BlockState state, int fortune, World world, BlockPos pos, Random random) {
-        if(state.get(AGE)==0){
-            return 1;
-        }else{
-            return 2+random.nextInt(3)+fortune;
-        }
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        return new ItemStack(ModItems.MINERAL_FRUIT,1);
     }
 
     @Override
@@ -158,22 +153,22 @@ public class BlockBrinePustule extends BlockKathairisPlant implements IGrowable 
     }
 
     private void handleFacing(BlockState state, IWorld world, BlockPos pos) {
-        if (isStone(world.getBlockState(pos.east()).getBlock())) {
+        if (isStone(world.getBlockState(pos.east()))) {
             world.setBlockState(pos, state.with(FACING, Direction.EAST), 2);
         }
-        if (isStone(world.getBlockState(pos.west()).getBlock())) {
+        if (isStone(world.getBlockState(pos.west()))) {
             world.setBlockState(pos, state.with(FACING, Direction.WEST), 2);
         }
-        if (isStone(world.getBlockState(pos.south()).getBlock())) {
+        if (isStone(world.getBlockState(pos.south()))) {
             world.setBlockState(pos, state.with(FACING, Direction.SOUTH), 2);
         }
-        if (isStone(world.getBlockState(pos.north()).getBlock())) {
+        if (isStone(world.getBlockState(pos.north()))) {
             world.setBlockState(pos, state.with(FACING, Direction.NORTH), 2);
         }
     }
 
-    private boolean isStone(Block block) {
-        return block instanceof BlockStone || block instanceof BlockKathairisStone;
+    private boolean isStone(BlockState state) {
+        return state.getMaterial()==Material.ROCK;
     }
 
     @Override
