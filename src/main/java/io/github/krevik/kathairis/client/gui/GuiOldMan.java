@@ -4,10 +4,14 @@ package io.github.krevik.kathairis.client.gui;
 import io.github.krevik.kathairis.util.networking.PacketHandler;
 import io.github.krevik.kathairis.util.networking.packets.PacketServerGivePlayerEthereal;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.recipebook.FurnaceRecipeGui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.BookItem;
+import net.minecraft.item.WritableBookItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,7 +22,8 @@ import org.lwjgl.opengl.GL11;
 import static io.github.krevik.kathairis.util.ModReference.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiOldMan extends ScreenGui{
+public class GuiOldMan extends AbstractGui {
+
 
     Minecraft mc = Minecraft.getInstance();
     private final int ImageHeight = 340, ImageWidth = 704, ImageScale = 250;

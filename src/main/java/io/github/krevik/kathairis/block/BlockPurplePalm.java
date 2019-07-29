@@ -12,6 +12,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
@@ -20,15 +21,15 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockPurplePalm extends BlockKathairisPlant {
     public static final EnumProperty<EnumType> VARIANT = EnumProperty.create("variant", BlockPurplePalm.EnumType.class);
     public BlockPurplePalm() {
         this.setDefaultState(this.stateContainer.getBaseState().with(VARIANT, BlockPurplePalm.EnumType.NORMAL));
     }
+
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
         if(state.get(VARIANT)==BlockPurplePalm.EnumType.NORMAL){
             return VoxelShapes.create(0,0,0,1,2,1);
         }else{
@@ -47,24 +48,24 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_) {
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos blockPos, boolean isMoving) {
         if (!isValidPosition(state, world, pos)) {
             if(world.getBlockState(pos.down()).getBlock()==this){
                 world.destroyBlock(pos.down(),false);
                 world.destroyBlock(pos,false);
             }
             if(world.getBlockState(pos.up()).getBlock()==this){
-                world.removeBlock(pos.up());
+                world.removeBlock(pos.up(),isMoving);
                 world.destroyBlock(pos,false);
             }
         }else{
             if(state==ModBlocks.PURPLE_PALM.getDefaultState()){
                 if(world.getBlockState(pos.up())!=ModBlocks.PURPLE_PALM.getDefaultState().with(VARIANT, BlockPurplePalm.EnumType.AIR)&&world.getBlockState(pos.up()).getBlock()!=Blocks.AIR){
-                    world.removeBlock(pos);
+                    world.removeBlock(pos,isMoving);
                 }
             }else{
                 if(world.getBlockState(pos.down())!=ModBlocks.PURPLE_PALM.getDefaultState()){
-                    world.removeBlock(pos);
+                    world.removeBlock(pos,isMoving);
                 }
             }
 
@@ -99,14 +100,15 @@ public class BlockPurplePalm extends BlockKathairisPlant {
     }
 
     @Override
-    public void onBlockAdded(BlockState p_196259_1_, World wo, BlockPos pos, BlockState p_196259_4_) {
-        if(p_196259_1_==ModBlocks.PURPLE_PALM.getDefaultState()) {
+    public void onBlockAdded(BlockState p_220082_1_, World wo, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
+        if(p_220082_1_==ModBlocks.PURPLE_PALM.getDefaultState()) {
             if (wo.isAirBlock(pos.up())) {
                 wo.setBlockState(pos.up(), ModBlocks.PURPLE_PALM.getDefaultState().with(VARIANT, BlockPurplePalm.EnumType.AIR));
             }
         }
-        super.onBlockAdded(p_196259_1_, wo, pos, p_196259_4_);
+        super.onBlockAdded(p_220082_1_, wo, pos, p_220082_4_,p_220082_5_);
     }
+
 
     @Override
     public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
@@ -117,15 +119,6 @@ public class BlockPurplePalm extends BlockKathairisPlant {
             world.destroyBlock(pos.up(),false);
         }
         super.onBlockHarvested(world,pos,state,player);
-    }
-
-    @Override
-    public int getItemsToDropCount(BlockState state, int p_196251_2_, World p_196251_3_, BlockPos p_196251_4_, Random p_196251_5_) {
-        if(state==ModBlocks.PURPLE_PALM.getDefaultState()){
-            return 1;
-        }else{
-            return 0;
-        }
     }
 
     @Override

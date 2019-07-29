@@ -9,6 +9,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
@@ -34,9 +35,10 @@ public class BlockMagicBeans extends CropsBlock {
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader p_196244_2_, BlockPos p_196244_3_) {
+	public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
 		return VoxelShapes.create(CARROT_AABB[state.get(getAgeProperty()).intValue()]);
 	}
+
 
 	@Override
 	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
@@ -46,16 +48,11 @@ public class BlockMagicBeans extends CropsBlock {
 
 	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		return (worldIn.getLightSubtracted(pos, 0) >= 8 || worldIn.canSeeSky(pos)) && isValidGround(worldIn.getBlockState(pos.down()), worldIn, pos.down());
+		return (worldIn.getLightSubtracted(pos, 0) >= 8 || worldIn.canBlockSeeSky(pos)) && isValidGround(worldIn.getBlockState(pos.down()), worldIn, pos.down());
 	}
 
 	@Override
 	protected IItemProvider getSeedsItem() {
-		return MAGIC_BEANS;
-	}
-
-	@Override
-	protected IItemProvider getCropsItem() {
 		return MAGIC_BEANS;
 	}
 

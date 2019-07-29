@@ -1,15 +1,8 @@
 package io.github.krevik.kathairis.block;
 
-import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author Krevik

@@ -8,25 +8,21 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class BlockForestCandle extends BlockKathairisPlant {
     public static final EnumProperty<BlockForestCandle.EnumType> VARIANT = EnumProperty.create("variant", BlockForestCandle.EnumType.class);
@@ -34,8 +30,10 @@ public class BlockForestCandle extends BlockKathairisPlant {
         super(Block.Properties.create(Material.PLANTS).sound(SoundType.PLANT).hardnessAndResistance(0).tickRandomly().doesNotBlockMovement().lightValue(7));
         this.setDefaultState(this.stateContainer.getBaseState().with(VARIANT, BlockForestCandle.EnumType.BOTTOM));
     }
+
+
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
         if(state.get(VARIANT)==BlockForestCandle.EnumType.BOTTOM){
             return VoxelShapes.create(0,0,0,1,2,1);
         }else{
@@ -53,8 +51,9 @@ public class BlockForestCandle extends BlockKathairisPlant {
         }
     }
 
+
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_) {
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block p_189540_4_, BlockPos p_189540_5_, boolean isMoving) {
         if (!isValidPosition(state, world, pos)) {
             if(world.getBlockState(pos.down()).getBlock()==this){
                 world.destroyBlock(pos.down(),false);

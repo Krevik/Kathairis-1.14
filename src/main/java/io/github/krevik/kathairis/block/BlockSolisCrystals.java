@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
@@ -13,7 +12,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -42,10 +40,6 @@ public class BlockSolisCrystals extends Block {
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
-	}
-
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
-		return BlockFaceShape.UNDEFINED;
 	}
 
 	@Override
@@ -108,8 +102,7 @@ public class BlockSolisCrystals extends Block {
 
 	public boolean isValidGround(BlockState state) {
 		boolean is = false;
-		Block groundBlock = state.getBlock();
-		if (groundBlock.isFullCube(state) && groundBlock.isTopSolid(state)) {
+		if (state.isSolid()) {
 			is = true;
 		}
 		return is;

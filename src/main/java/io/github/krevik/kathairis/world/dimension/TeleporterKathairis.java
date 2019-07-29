@@ -4,11 +4,13 @@ import io.github.krevik.kathairis.block.BlockKathairisPortal;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -115,14 +117,14 @@ public class TeleporterKathairis extends Teleporter {
 			double d5 = (double) blockpos.getX() + 0.5D;
 			double d7 = (double) blockpos.getZ() + 0.5D;
 			BlockPattern.PatternHelper blockpattern$patternhelper = KATHAIRIS_PORTAL.createPatternHelper(this.world, blockpos);
-			boolean flag1 = blockpattern$patternhelper.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE;
-			double d2 = blockpattern$patternhelper.getForwards().getAxis() == EnumFacing.Axis.X ? (double) blockpattern$patternhelper.getFrontTopLeft().getZ() : (double) blockpattern$patternhelper.getFrontTopLeft().getX();
+			boolean flag1 = blockpattern$patternhelper.getForwards().rotateY().getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+			double d2 = blockpattern$patternhelper.getForwards().getAxis() == Direction.Axis.X ? (double) blockpattern$patternhelper.getFrontTopLeft().getZ() : (double) blockpattern$patternhelper.getFrontTopLeft().getX();
 			double d6 = (double) (blockpattern$patternhelper.getFrontTopLeft().getY() + 1) - entityIn.getLastPortalVec().y * (double) blockpattern$patternhelper.getHeight();
 			if (flag1) {
 				++d2;
 			}
 
-			if (blockpattern$patternhelper.getForwards().getAxis() == EnumFacing.Axis.X) {
+			if (blockpattern$patternhelper.getForwards().getAxis() == Direction.Axis.X) {
 				d7 = d2 + (1.0D - entityIn.getLastPortalVec().x) * (double) blockpattern$patternhelper.getWidth() * (double) blockpattern$patternhelper.getForwards().rotateY().getAxisDirection().getOffset();
 			} else {
 				d5 = d2 + (1.0D - entityIn.getLastPortalVec().x) * (double) blockpattern$patternhelper.getWidth() * (double) blockpattern$patternhelper.getForwards().rotateY().getAxisDirection().getOffset();
@@ -148,8 +150,7 @@ public class TeleporterKathairis extends Teleporter {
 
 			double d3 = entityIn.getMotion().x;
 			double d4 = entityIn.getMotion().z;
-			entityIn.motionX = d3 * (double) f + d4 * (double) f3;
-			entityIn.motionZ = d3 * (double) f2 + d4 * (double) f1;
+			entityIn.setMotion(new Vec3d(d3 * (double) f + d4 * (double) f3,entityIn.getMotion().getY(),d3 * (double) f2 + d4 * (double) f1));
 			entityIn.rotationYaw = rotationYaw - (float) (entityIn.getTeleportDirection().getOpposite().getHorizontalIndex() * 90) + (float) (blockpattern$patternhelper.getForwards().getHorizontalIndex() * 90);
 			if (entityIn instanceof EntityPlayerMP) {
 				((EntityPlayerMP) entityIn).connection.setPlayerLocation(d5, d6, d7, entityIn.rotationYaw, entityIn.rotationPitch);
@@ -310,7 +311,7 @@ public class TeleporterKathairis extends Teleporter {
 			}
 		}
 
-		IBlockState iblockstate = KATHAIRIS_PORTAL.getDefaultState().with(BlockKathairisPortal.AXIS, l6 == 0 ? EnumFacing.Axis.Z : EnumFacing.Axis.X);
+		BlockState iblockstate = KATHAIRIS_PORTAL.getDefaultState().with(BlockKathairisPortal.AXIS, l6 == 0 ? Direction.Axis.Z : Direction.Axis.X);
 
 		for (int k8 = 0; k8 < 2; ++k8) {
 			for (int j9 = 0; j9 < 3; ++j9) {

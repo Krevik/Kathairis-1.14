@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.init.Particles;
@@ -13,6 +12,8 @@ import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
@@ -47,18 +48,9 @@ public class BlockSoftSand extends Block {
 		return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
 
-	@Override
-	public boolean isFullCube(BlockState state) {
-		return false;
-	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, BlockState state, BlockPos pos, Direction face) {
-		return BlockFaceShape.UNDEFINED;
-	}
-
-	@Override
-	public VoxelShape getCollisionShape(BlockState p_196268_1_, IBlockReader p_196268_2_, BlockPos p_196268_3_) {
+	public VoxelShape getCollisionShape(BlockState p_196268_1_, IBlockReader p_196268_2_, BlockPos p_196268_3_, ISelectionContext selectionContext) {
 		return VoxelShapes.empty();
 	}
 
@@ -90,10 +82,6 @@ public class BlockSoftSand extends Block {
 		return 2;
 	}
 
-	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState) {
-		worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(worldIn));
-	}
 
 	@Override
 	public BlockRenderLayer getRenderLayer() {
@@ -102,7 +90,7 @@ public class BlockSoftSand extends Block {
 
 	@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		entityIn.setInWeb();
+		entityIn.setMotionMultiplier(state, new Vec3d(0.25D, (double)0.05F, 0.25D));
 	}
 
 	private void checkFallable(World worldIn, BlockPos pos) {
@@ -112,13 +100,13 @@ public class BlockSoftSand extends Block {
 				if (!worldIn.isRemote) {
 					FallingBlockEntity entityfallingblock = new FallingBlockEntity(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D, worldIn.getBlockState(pos));
 					this.onStartFalling(entityfallingblock);
-					worldIn.spawnEntity(entityfallingblock);
+					worldIn.addEntity(entityfallingblock);
 				}
 			} else {
 				BlockState state = getDefaultState();
 				if (worldIn.getBlockState(pos).getBlock() == this) {
 					state = worldIn.getBlockState(pos);
-					worldIn.removeBlock(pos);
+					worldIn.removeBlock(pos,false);
 				}
 
 				BlockPos blockpos;
