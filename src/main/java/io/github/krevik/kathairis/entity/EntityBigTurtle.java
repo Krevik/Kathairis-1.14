@@ -1,12 +1,18 @@
 package io.github.krevik.kathairis.entity;
 
+import io.github.krevik.kathairis.entity.ai.EntityAIAvoidMovingSandsAndCactus;
 import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.init.ModSounds;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.Block;
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -30,8 +36,9 @@ public class EntityBigTurtle extends AnimalEntity
         spawnableBlocks.add(ModBlocks.KATHAIRIS_SAND);
     }
 
+
     @Override
-    public boolean canSpawn(IWorld p_205020_1_, boolean p_205020_2_) {
+    public boolean canSpawn(IWorld p_205020_1_, SpawnReason sth) {
         int lvt_3_1_ = MathHelper.floor(this.posX);
         int lvt_4_1_ = MathHelper.floor(this.getBoundingBox().minY);
         int lvt_5_1_ = MathHelper.floor(this.posZ);
@@ -42,16 +49,15 @@ public class EntityBigTurtle extends AnimalEntity
 
 
     @Override
-    protected void initEntityAI()
+    protected void registerGoals()
     {
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIPanic(this, 1.25D));
-        this.tasks.addTask(2, new EntityAIMate(this, 1.0D));
-        this.tasks.addTask(4, new EntityAIFollowParent(this, 1.1D));
-        this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
-        //this.tasks.addTask(0, new EntityAIAvoidMovingSandsAndCactus(this,1.2D));
+        this.goalSelector.addGoal(0, new EntityAIAvoidMovingSandsAndCactus(this,1.0D));
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new PanicGoal(this,1.25D));
+        this.goalSelector.addGoal(2, new BreedGoal(this,1.0D));
+        this.goalSelector.addGoal(3, new FollowParentGoal(this,1.1D));
+        this.goalSelector.addGoal(4, new RandomWalkingGoal(this,1.0D));
+        this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
     }
 
     @Override
@@ -81,7 +87,7 @@ public class EntityBigTurtle extends AnimalEntity
     }
 
     @Override
-    public EntityBigTurtle createChild(EntityAgeable ageable)
+    public EntityBigTurtle createChild(AgeableEntity ageable)
     {
         EntityBigTurtle entitysheep1 = new EntityBigTurtle(this.world);
         return entitysheep1;

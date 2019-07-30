@@ -3,6 +3,7 @@ package io.github.krevik.kathairis.world.dimension.biome.biomes;
 import io.github.krevik.kathairis.world.dimension.feature.KatharianFeatureList;
 import io.github.krevik.kathairis.world.dimension.feature.KatharianMinableConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 public class BiomeKatharianBiomeBase extends Biome {
     public Color baseGrassColor =new Color(66,244,238);
 
-    protected BiomeKatharianBiomeBase(BiomeBuilder p_i48975_1_) {
+    protected BiomeKatharianBiomeBase(Biome.Builder p_i48975_1_) {
         super(p_i48975_1_);
         //this.addStructure(KatharianFeatureList.CRYSTAL_LABIRYNTH, new CrystalLabirynthConfig(0.1D));
         this.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, createCompositeFeature(Feature.MINABLE, new MinableConfig(KatharianMinableConfig.IS_ROCK, Blocks.STONE.getDefaultState(), 17), COUNT_RANGE, new CountRangeConfig(20, 0, 0, 128)));
@@ -82,7 +83,7 @@ public class BiomeKatharianBiomeBase extends Biome {
         return hex;
     }
 
-    public void addSpawn(EnumCreatureType type, Biome.SpawnListEntry spawnListEntry) {
+    public void addSpawn(EntityClassification type, Biome.SpawnListEntry spawnListEntry) {
         getSpawns(type).add(spawnListEntry);
     }
 }

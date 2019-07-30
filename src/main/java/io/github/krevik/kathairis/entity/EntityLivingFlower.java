@@ -4,14 +4,17 @@ import io.github.krevik.kathairis.entity.ai.EntityAIHealTargets;
 import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -24,7 +27,6 @@ public class EntityLivingFlower extends EntityKatharianAnimal
         super(ModEntities.LIVING_FLOWER,worldIn);
         this.setSize(0.3F, 0.5F);
         this.experienceValue=10;
-        spawnableBlocks.add(ModBlocks.KATHAIRIS_GRASS);
     }
 
     public void deallowDespawning(){
@@ -33,19 +35,18 @@ public class EntityLivingFlower extends EntityKatharianAnimal
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable ageable) {
+    public AgeableEntity createChild(AgeableEntity ageable) {
         return null;
     }
 
-    protected void initEntityAI()
-    {
-        super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIHealTargets(this));
-    }
-    
     @Override
-    public boolean canDespawn()
-    {
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new EntityAIHealTargets(this));
+    }
+
+    @Override
+    public boolean canDespawn(double p_213397_1_) {
         return getDataManager().get(canDespawn).booleanValue();
     }
 
@@ -73,9 +74,7 @@ public class EntityLivingFlower extends EntityKatharianAnimal
     
     @Override
     public void tick() {
-        this.motionY=-1;
-        this.motionX=0;
-        this.motionZ=0;
+        setMotion(new Vec3d(0,-1,0));
         this.posX=this.lastTickPosX;
         this.posZ=this.lastTickPosZ;
         this.rotationPitch=0;
@@ -130,14 +129,14 @@ public class EntityLivingFlower extends EntityKatharianAnimal
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound compound)
+    public void writeAdditional(CompoundNBT compound)
     {
         super.writeAdditional(compound);
         compound.putBoolean("canDespawn",this.getDataManager().get(canDespawn));
     }
 
     @Override
-    public void readAdditional(NBTTagCompound compound)
+    public void readAdditional(CompoundNBT compound)
     {
         super.readAdditional(compound);
         getDataManager().set(canDespawn,compound.getBoolean("canDespawn"));

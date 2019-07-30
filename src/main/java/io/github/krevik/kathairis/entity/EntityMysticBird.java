@@ -4,11 +4,17 @@ import io.github.krevik.kathairis.block.BlockKathairisPlant;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.init.ModSounds;
 import io.github.krevik.kathairis.util.KatharianLootTables;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.passive.AmbientEntity;
 import net.minecraft.entity.passive.EntityAmbientCreature;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -18,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -25,7 +32,7 @@ import net.minecraft.world.gen.Heightmap;
 
 import javax.annotation.Nullable;
 
-public class EntityMysticBird extends EntityAmbientCreature
+public class EntityMysticBird extends AmbientEntity
 {
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityMysticBird.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> SITTING = EntityDataManager.createKey(EntityMysticBird.class, DataSerializers.BYTE);
@@ -40,15 +47,15 @@ public class EntityMysticBird extends EntityAmbientCreature
     }
 
     @Override
-    public boolean canSpawn(IWorld p_205020_1_, boolean p_205020_2_) {
+    public boolean canSpawn(IWorld p_205020_1_, SpawnReason p_205020_2_) {
         return super.canSpawn(p_205020_1_, p_205020_2_);
     }
 
     @Nullable
     @Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance p_204210_1_, @Nullable IEntityLivingData p_204210_2_, @Nullable NBTTagCompound p_204210_3_) {
+    public ILivingEntityData onInitialSpawn(IWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
         this.setVariant(this.rand.nextInt(4));
-        return super.onInitialSpawn(p_204210_1_, p_204210_2_, p_204210_3_);
+        return super.onInitialSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
     }
 
     @Override
@@ -149,15 +156,13 @@ public class EntityMysticBird extends EntityAmbientCreature
 
         if (this.getIsBirdSitting())
         {
-            this.motionX = 0.0D;
-            this.motionY = 0.0D;
-            this.motionZ = 0.0D;
+            setMotion(new Vec3d(0,0,0));
             this.posY=this.world.getHeight(Heightmap.Type.MOTION_BLOCKING,this.getPosition()).getY();
             //this.posY = (double)MathHelper.floor(this.posY) + 1.0D - (double)this.height;
         }
         else
         {
-            this.motionY *= 0.6000000238418579D;
+            setMotionMultiplier(Blocks.AIR.getDefaultState(),new Vec3d(1, 0.6000000238418579D,1));
         }
     }
 
@@ -170,10 +175,10 @@ public class EntityMysticBird extends EntityAmbientCreature
 
         if (this.getIsBirdSitting())
         {
-            if (this.world.getBlockState(blockpos1).isNormalCube())
+            if (this.world.getBlockState(blockpos1).isNormalCube(world,blockpos1))
             {
 
-                if (this.world.getNearestPlayerNotCreative(this, 4.0D) != null)
+                if (this.world.getClosestPlayer(this, 4.0D) != null)
                 {
                     this.setIsBirdSitting(false);
                     this.world.playEvent(null, 1025, blockpos, 0);
@@ -192,7 +197,7 @@ public class EntityMysticBird extends EntityAmbientCreature
                 this.spawnPosition = null;
             }
 
-            if (this.spawnPosition == null || this.rand.nextInt(30) == 0 || this.spawnPosition.distanceSq((double)((int)this.posX), (double)((int)this.posY), (double)((int)this.posZ)) < 4.0D)
+            if (this.spawnPosition == null || this.rand.nextInt(30) == 0 || this.spawnPosition.distanceSq((double)((int)this.posX), (double)((int)this.posY), (double)((int)this.posZ),true) < 4.0D)
             {
                 this.spawnPosition = new BlockPos((int)this.posX + this.rand.nextInt(7) - this.rand.nextInt(7), (int)this.posY + this.rand.nextInt(6) - 2, (int)this.posZ + this.rand.nextInt(7) - this.rand.nextInt(7));
             }
@@ -200,15 +205,16 @@ public class EntityMysticBird extends EntityAmbientCreature
             double d0 = (double)this.spawnPosition.getX() + 0.5D - this.posX;
             double d1 = (double)this.spawnPosition.getY() + 0.1D - this.posY;
             double d2 = (double)this.spawnPosition.getZ() + 0.5D - this.posZ;
-            this.motionX += (Math.signum(d0) * 0.5D - this.motionX) * 0.10000000149011612D;
-            this.motionY += (Math.signum(d1) * 0.699999988079071D - this.motionY) * 0.10000000149011612D;
-            this.motionZ += (Math.signum(d2) * 0.5D - this.motionZ) * 0.10000000149011612D;
-            float f = (float)(MathHelper.atan2(this.motionZ, this.motionX) * (180D / Math.PI)) - 90.0F;
+            double motionX = getMotion().getX() + (Math.signum(d0) * 0.5D - this.getMotion().getX()) * 0.10000000149011612D;
+            double motionY = getMotion().getY() +(Math.signum(d1) * 0.699999988079071D - this.getMotion().getY()) * 0.10000000149011612D;
+            double motionZ = getMotion().getZ() +(Math.signum(d2) * 0.5D - this.getMotion().getZ()) * 0.10000000149011612D;
+            setMotion(new Vec3d(motionX,motionY,motionZ));
+            float f = (float)(MathHelper.atan2(this.getMotion().getZ(), this.getMotion().getX()) * (180D / Math.PI)) - 90.0F;
             float f1 = MathHelper.wrapDegrees(f - this.rotationYaw);
             this.moveForward = 0.5F;
             this.rotationYaw += f1;
 
-            if (this.rand.nextInt(100) == 0 && this.world.getBlockState(blockpos1).isNormalCube()&&!(this.world.getBlockState(blockpos1).getBlock() instanceof BlockKathairisPlant))
+            if (this.rand.nextInt(100) == 0 && this.world.getBlockState(blockpos1).isNormalCube(world,blockpos1)&&!(this.world.getBlockState(blockpos1).getBlock() instanceof BlockKathairisPlant))
             {
                 this.setIsBirdSitting(true);
             }
@@ -227,7 +233,7 @@ public class EntityMysticBird extends EntityAmbientCreature
     }
 
     @Override
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos)
     {
     }
 
@@ -256,7 +262,7 @@ public class EntityMysticBird extends EntityAmbientCreature
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound compound)
+    public void writeAdditional(CompoundNBT compound)
     {
         super.writeAdditional(compound);
         compound.putByte("BatFlags", this.getDataManager().get(SITTING).byteValue());
@@ -265,7 +271,7 @@ public class EntityMysticBird extends EntityAmbientCreature
     }
 
     @Override
-    public void readAdditional(NBTTagCompound compound)
+    public void readAdditional(CompoundNBT compound)
     {
         super.readAdditional(compound);
         this.getDataManager().set(SITTING, Byte.valueOf(compound.getByte("BatFlags")));
@@ -273,11 +279,6 @@ public class EntityMysticBird extends EntityAmbientCreature
 
     }
 
-    @Override
-    public float getEyeHeight()
-    {
-        return this.height / 2.0F;
-    }
 
     @Nullable
     @Override

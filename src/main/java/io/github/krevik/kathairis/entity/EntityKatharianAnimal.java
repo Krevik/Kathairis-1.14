@@ -1,26 +1,30 @@
 package io.github.krevik.kathairis.entity;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class EntityKatharianAnimal extends EntityAnimal {
-    public ArrayList<Block> spawnableBlocks;
+public class EntityKatharianAnimal extends AnimalEntity {
 
-    public EntityKatharianAnimal(EntityType<?> type, World world){
+    public EntityKatharianAnimal(EntityType<? extends AnimalEntity> type, World world){
         super(type,world);
-        spawnableBlocks= new ArrayList<>();
+    }
 
+    public EntityKatharianAnimal(World world){
+        super(null,world);
     }
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable entityAgeable) {
+    public AgeableEntity createChild(AgeableEntity entityAgeable) {
         return null;
     }
 }
