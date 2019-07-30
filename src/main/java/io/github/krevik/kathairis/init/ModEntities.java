@@ -4,14 +4,11 @@ import io.github.krevik.kathairis.entity.*;
 import io.github.krevik.kathairis.entity.butterfly.*;
 import io.github.krevik.kathairis.world.dimension.biome.biomes.BiomeKatharianBiomeBase;
 import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemSpawnEgg;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
@@ -51,11 +48,11 @@ public class ModEntities {
     public static EntityType<EntityMysticWandShoot> MYSTIC_WAND_SHOOT = _null();
 
     public static void registerPlacementType(EntityType<?> type, EntitySpawnPlacementRegistry.PlacementType spawnType){
-        EntitySpawnPlacementRegistry.register(type, spawnType, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,null);
+        //EntitySpawnPlacementRegistry.register(type, spawnType, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,null);
     }
 
     public static void registerPlacementType(EntityType<?> type,EntitySpawnPlacementRegistry.PlacementType spawnType,Heightmap.Type heightType){
-        EntitySpawnPlacementRegistry.register(type, spawnType, heightType,null);
+        //EntitySpawnPlacementRegistry.register(type, spawnType, heightType,null);
     }
 
     public static void registerPlacementTypes(){

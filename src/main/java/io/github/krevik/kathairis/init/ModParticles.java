@@ -3,7 +3,6 @@ package io.github.krevik.kathairis.init;
 import io.github.krevik.kathairis.particle.BasicKatharianParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.IRegistry;
 
 import static io.github.krevik.kathairis.util.ModReference.MOD_ID;
 
@@ -20,17 +19,18 @@ public class ModParticles {
 
 
     private static <T extends ParticleType<?>> T register(String name, boolean alwaysShow) {
-        IRegistry.PARTICLE_TYPE.put(new ResourceLocation(MOD_ID,name), new BasicKatharianParticleType(new ResourceLocation(MOD_ID,name), alwaysShow));
+        //IRegistry.PARTICLE_TYPE.put(new ResourceLocation(MOD_ID,name), new BasicKatharianParticleType(new ResourceLocation(MOD_ID,name), alwaysShow));
         return getRegisteredParticleTypes(name);
     }
 
     public static <T extends ParticleType<?>> T getRegisteredParticleTypes(String name) {
-        T t = (T)IRegistry.PARTICLE_TYPE.get(new ResourceLocation(MOD_ID,name));
+        /*T t = (T)IRegistry.PARTICLE_TYPE.get(new ResourceLocation(MOD_ID,name));
         if (t == null) {
             throw new IllegalStateException("Invalid or unknown particle type: " + name);
         } else {
             return t;
-        }
+        }*/
+        return null;
     }
 
 

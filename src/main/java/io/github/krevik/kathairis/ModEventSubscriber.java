@@ -18,8 +18,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.Rarity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -93,7 +96,7 @@ public final class ModEventSubscriber {
 				setup(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.5f, 2.5f).sound(SoundType.STONE)), "kathairis_stone_tiles"),
 				setup(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(3f).sound(SoundType.STONE).lightValue(12)), "shiny_rock"),
 				setup(kathairisStoneBricks = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.5f, 2.5f).sound(SoundType.STONE)), "kathairis_stone_bricks"),
-				setup(new Block(Block.Properties.create(Material.GROUND).hardnessAndResistance(1f, 1f).sound(SoundType.GROUND)), "mud_block"),
+				setup(new Block(Block.Properties.create(Material.GOURD).hardnessAndResistance(1f, 1f).sound(SoundType.GROUND)), "mud_block"),
 				setup(mudBricks = new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2f, 2f).sound(SoundType.STONE)), "mud_bricks"),
 				setup(new BlockMagnethium(), "magnethium"),
 				setup(new Block(Block.Properties.create(Material.ANVIL).hardnessAndResistance(4f, 4f).sound(SoundType.METAL)), "iron_gold_block"),
@@ -207,46 +210,46 @@ public final class ModEventSubscriber {
 				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS)), "titanium_ingot"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS)), "titanium_rod"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS)), "revenum_ingot"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(EPIC)), "cloud_essence"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(RARE)), "howler_fur"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS).rarity(RARE)), "crystal_cluster"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS).rarity(RARE)), "magnethium_shard"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.EPIC)), "cloud_essence"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.RARE)), "howler_fur"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS).rarity(Rarity.RARE)), "crystal_cluster"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS).rarity(Rarity.RARE)), "magnethium_shard"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "crystal_shard_yellow"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "crystal_shard_blue"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "crystal_shard_violet"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "tortoise_shell"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "butterfly_flower_nectar"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS)), "iron_gold_ingot"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, HEAD), "titanium_helmet"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, CHEST), "titanium_chestplate"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, LEGS), "titanium_leggings"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, FEET), "titanium_boots"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, EquipmentSlotType.HEAD), "titanium_helmet"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, EquipmentSlotType.CHEST), "titanium_chestplate"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, EquipmentSlotType.LEGS), "titanium_leggings"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.TITANIUM, EquipmentSlotType.FEET), "titanium_boots"),
 				setup(new ItemKathairisSword(ModItemTiers.TITANIUM), "titanium_sword"),
 				setup(new ItemKathairisHoe(ModItemTiers.TITANIUM), "titanium_hoe"),
 				setup(new ItemKathairisAxe(ModItemTiers.TITANIUM), "titanium_axe"),
 				setup(new ItemKathairisPickaxe(ModItemTiers.TITANIUM), "titanium_pickaxe"),
 				setup(new ItemKathairisShovel(ModItemTiers.TITANIUM), "titanium_shovel"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, HEAD), "revenum_helmet"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, CHEST), "revenum_chestplate"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, LEGS), "revenum_leggings"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, FEET), "revenum_boots"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, EquipmentSlotType.HEAD), "revenum_helmet"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, EquipmentSlotType.CHEST), "revenum_chestplate"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, EquipmentSlotType.LEGS), "revenum_leggings"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.REVENUM, EquipmentSlotType.FEET), "revenum_boots"),
 				setup(new ItemKathairisSword(ModItemTiers.REVENUM), "revenum_sword"),
 				setup(new ItemKathairisHoe(ModItemTiers.REVENUM), "revenum_hoe"),
 				setup(new ItemKathairisAxe(ModItemTiers.REVENUM), "revenum_axe"),
 				setup(new ItemKathairisPickaxe(ModItemTiers.REVENUM), "revenum_pickaxe"),
 				setup(new ItemKathairisShovel(ModItemTiers.REVENUM), "revenum_shovel"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(EPIC)), "skyray_feather"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(EPIC)), "solis_crystal"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, HEAD), "mystic_helmet"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, CHEST), "mystic_chestplate"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, LEGS), "mystic_leggings"),
-				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, FEET), "mystic_boots"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.EPIC)), "skyray_feather"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.EPIC)), "solis_crystal"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, EquipmentSlotType.HEAD), "mystic_helmet"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, EquipmentSlotType.CHEST), "mystic_chestplate"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, EquipmentSlotType.LEGS), "mystic_leggings"),
+				setup(new ItemKathairisArmor(ModArmorMaterials.MYSTIC, EquipmentSlotType.FEET), "mystic_boots"),
 				setup(new ItemKathairisSword(ModItemTiers.MYSTIC), "mystic_sword"),
 				setup(new ItemKathairisHoe(ModItemTiers.MYSTIC), "mystic_hoe"),
 				setup(new ItemKathairisAxe(ModItemTiers.MYSTIC), "mystic_axe"),
 				setup(new ItemKathairisPickaxe(ModItemTiers.MYSTIC), "mystic_pickaxe"),
 				setup(new ItemKathairisShovel(ModItemTiers.MYSTIC), "mystic_shovel"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(EPIC)), "cloud_pearl"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.EPIC)), "cloud_pearl"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MATERIALS)), "shiny_stick"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "cloud_dust_blue"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "cloud_dust_yellow"),
@@ -258,16 +261,16 @@ public final class ModEventSubscriber {
 				setup(new Item(new Item.Properties().group(ModItemGroups.FOOD)), "cotton_candy"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.FOOD)), "bison_meat"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.FOOD)), "cooked_bison_meat"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(RARE)), "jellyfish_tentacle"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.RARE)), "jellyfish_tentacle"),
 				setup(new ItemGooseberries(2, 0.4f, ModBlocks.GOOSEBERRY_BUSH), "gooseberries"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "venom_sac"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "glass_jar"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.FOOD)), "nectar_bowl"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(COMMON)), "butterfly_common_1"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(COMMON)), "butterfly_common_2"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(COMMON)), "butterfly_common_moth"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(UNCOMMON)), "butterfly_illukini"),
-				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(RARE)), "butterfly_cloud_shimmer"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.COMMON)), "butterfly_common_1"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.COMMON)), "butterfly_common_2"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.COMMON)), "butterfly_common_moth"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.UNCOMMON)), "butterfly_illukini"),
+				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS).rarity(Rarity.RARE)), "butterfly_cloud_shimmer"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "butterfly_catcher"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.MISCELLANEOUS)), "wings_piece"),
 				setup(new Item(new Item.Properties().group(ModItemGroups.FOOD)), "fungal_drug"),
@@ -295,7 +298,7 @@ public final class ModEventSubscriber {
 			if (block == ModBlocks.MAGIC_BEANS || block == ModBlocks.KATHAIRIS_PORTAL) {
 				continue;
 			}
-			registry.register(setup(new ItemBlock(block, new Item.Properties().group(BUILDING_BLOCKS)), block.getRegistryName()));
+			registry.register(setup(new BlockItem(block, new Item.Properties().group(BUILDING_BLOCKS)), block.getRegistryName()));
 		}
 
 	}
@@ -368,12 +371,12 @@ public final class ModEventSubscriber {
 	public static void onFMLCommonSetup(final FMLCommonSetupEvent event){
 		ModParticles.registerParticles();
 		PacketHandler.register();
-		Kathairis.KATH_DIM_TYPE=DimensionManager.registerDimension(new ResourceLocation(MOD_ID,"kath_dim_type"), ModDimensions.KATHAIRIS, new PacketBuffer(Unpooled.buffer(16)));
+		Kathairis.KATH_DIM_TYPE=DimensionManager.registerDimension(new ResourceLocation(MOD_ID,"kath_dim_type"), ModDimensions.KATHAIRIS, new PacketBuffer(Unpooled.buffer(16)),true);
 	}
 
 	@SubscribeEvent
 	public static void onDimensionRegisterEvent(final RegisterDimensionsEvent event){
-		Kathairis.KATH_DIM_TYPE=DimensionManager.registerDimension(new ResourceLocation(MOD_ID,"kath_dim_type"), ModDimensions.KATHAIRIS, new PacketBuffer(Unpooled.buffer(16)));
+		Kathairis.KATH_DIM_TYPE=DimensionManager.registerDimension(new ResourceLocation(MOD_ID,"kath_dim_type"), ModDimensions.KATHAIRIS, new PacketBuffer(Unpooled.buffer(16)),true);
 	}
 
 	@SubscribeEvent
