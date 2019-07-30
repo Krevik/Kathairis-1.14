@@ -5,11 +5,9 @@ import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -21,9 +19,13 @@ public class EntityFungite extends CreatureEntity
     public EntityFungite(World worldIn)
     {
         super(ModEntities.FUNGITE,worldIn);
-        this.setSize(1.5F, 2.4F);
         this.experienceValue=30;
     }
+
+    public EntityFungite(EntityType<EntityFungite> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     protected void registerGoals() {

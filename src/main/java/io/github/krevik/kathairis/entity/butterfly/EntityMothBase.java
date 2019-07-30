@@ -1,7 +1,7 @@
 package io.github.krevik.kathairis.entity.butterfly;
 
 import io.github.krevik.kathairis.util.KatharianLootTables;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,8 +18,15 @@ public class EntityMothBase extends EntityBasicButterfly
     public EntityMothBase(World worldIn, EntityType type)
     {
         super(worldIn,type);
-        this.setSize(0.15F, 0.15F);
         this.experienceValue=1;
+    }
+
+    public EntityMothBase(World world){
+        super(world);
+    }
+
+    public EntityMothBase(EntityType<? extends EntityMothBase> type, World world) {
+        super(type, world);
     }
 
     @Override
@@ -63,7 +70,7 @@ public class EntityMothBase extends EntityBasicButterfly
     }
 
     @Override
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos)
     {
     }
 

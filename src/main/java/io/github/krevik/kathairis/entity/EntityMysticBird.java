@@ -6,16 +6,9 @@ import io.github.krevik.kathairis.init.ModSounds;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.passive.AmbientEntity;
-import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -41,10 +34,14 @@ public class EntityMysticBird extends AmbientEntity
     public EntityMysticBird(World worldIn)
     {
         super(ModEntities.MYSTIC_BIRD,worldIn);
-        this.setSize(0.5F, 0.7F);
         this.setIsBirdSitting(true);
         this.experienceValue=5;
     }
+
+    public EntityMysticBird(EntityType<EntityMysticBird> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     public boolean canSpawn(IWorld p_205020_1_, SpawnReason p_205020_2_) {

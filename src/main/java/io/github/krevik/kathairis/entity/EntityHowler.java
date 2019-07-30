@@ -12,10 +12,8 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.passive.horse.LlamaEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -38,8 +36,12 @@ public class EntityHowler extends CreatureEntity
     public EntityHowler(World worldIn)
     {
         super(ModEntities.HOWLER,worldIn);
-        this.setSize(0.85F, 1F);
     }
+
+    public EntityHowler(EntityType<EntityHowler> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     protected void registerGoals() {
@@ -50,9 +52,10 @@ public class EntityHowler extends CreatureEntity
         this.goalSelector.addGoal(0, new EntityAIAvoidMovingSandsAndCactus(this,1.2D));
         this.goalSelector.addGoal(4, new EntityAIHowlerAttackStun(this, 1.0D, true));
         this.goalSelector.addGoal(2, new NearestAttackableTargetGoal<PlayerEntity>(this, PlayerEntity.class, true));
-        this.goalSelector.addGoal(2, new EntityAITargetSpecified<AnimalEntity>(this, AnimalEntity.class, false, new Predicate<Entity>()
+        this.goalSelector.addGoal(2, new EntityAITargetSpecified<AnimalEntity>(this, AnimalEntity.class, false, new Predicate<LivingEntity>()
         {
-            public boolean apply(@Nullable Entity e)
+
+            public boolean apply(@Nullable LivingEntity e)
             {
                 return e instanceof SheepEntity || e instanceof RabbitEntity ||e instanceof PigEntity ||
                         e instanceof EntityBison||e instanceof EntityBigTurtle||e instanceof EntityGecko||

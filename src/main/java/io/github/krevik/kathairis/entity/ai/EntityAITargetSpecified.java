@@ -1,10 +1,7 @@
 package io.github.krevik.kathairis.entity.ai;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 
 import java.util.function.Predicate;

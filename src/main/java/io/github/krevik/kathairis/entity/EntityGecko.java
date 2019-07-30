@@ -1,31 +1,19 @@
 package io.github.krevik.kathairis.entity;
 
 import io.github.krevik.kathairis.entity.ai.EntityAIAvoidMovingSandsAndCactus;
-import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Items;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.ClimberPathNavigator;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -44,9 +32,13 @@ public class EntityGecko extends AnimalEntity {
 
     public EntityGecko(World worldIn) {
         super(ModEntities.GECKO,worldIn);
-        setSize(0.7F, 0.25F);
         experienceValue = 10;
     }
+
+    public EntityGecko(EntityType<EntityGecko> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     protected void registerGoals() {

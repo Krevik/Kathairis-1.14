@@ -7,14 +7,11 @@ import io.github.krevik.kathairis.init.ModSounds;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.Block;
 import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -30,10 +27,14 @@ public class EntityBigTurtle extends AnimalEntity
     public EntityBigTurtle(World worldIn)
     {
         super(ModEntities.BIG_TURTLE,worldIn);
-        this.setSize(0.9F, 1.2F);
         this.experienceValue=10;
         spawnableBlocks= new ArrayList<>();
         spawnableBlocks.add(ModBlocks.KATHAIRIS_SAND);
+    }
+
+
+    public EntityBigTurtle(EntityType<EntityBigTurtle> type, World world) {
+        super(type, world);
     }
 
 
@@ -44,7 +45,7 @@ public class EntityBigTurtle extends AnimalEntity
         int lvt_5_1_ = MathHelper.floor(this.posZ);
         BlockPos lvt_6_1_ = new BlockPos(lvt_3_1_, lvt_4_1_, lvt_5_1_);
         return spawnableBlocks.contains(p_205020_1_.getBlockState(lvt_6_1_.down()).getBlock()) && p_205020_1_.getLightSubtracted(lvt_6_1_, 0) > 8 &&
-                this.getBlockPathWeight(new BlockPos(this.posX, this.getBoundingBox().minY, this.posZ), p_205020_1_) >= 0.0F && p_205020_1_.getBlockState((new BlockPos(this)).down()).canEntitySpawn(this);
+                this.getBlockPathWeight(new BlockPos(this.posX, this.getBoundingBox().minY, this.posZ), p_205020_1_) >= 0.0F && p_205020_1_.getBlockState((new BlockPos(this)).down()).canEntitySpawn(world,new BlockPos(this).down(),ModEntities.BIG_TURTLE);
     }
 
 

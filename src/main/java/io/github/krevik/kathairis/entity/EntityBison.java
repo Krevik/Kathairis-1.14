@@ -8,22 +8,17 @@ import io.github.krevik.kathairis.init.ModItems;
 import io.github.krevik.kathairis.init.ModSounds;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.entity.*;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -32,7 +27,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +40,11 @@ public class EntityBison extends EntityKatharianAnimal
     public EntityBison(World worldIn)
     {
         super(ModEntities.BISON,worldIn);
-        this.setSize(1.5F, 1.7F);
         this.experienceValue=30;
-        spawnableBlocks.add(ModBlocks.KATHAIRIS_GRASS);
-        spawnableBlocks.add(ModBlocks.KATHAIRIS_DIRT);
+    }
+
+    public EntityBison(EntityType<? extends LivingEntity> type, World world) {
+        super((EntityType<? extends AnimalEntity>) type, world);
     }
 
     @Override

@@ -5,23 +5,16 @@ import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -41,10 +34,13 @@ public class EntityCactiSpore extends CreatureEntity
     public EntityCactiSpore(World worldIn)
     {
         super(ModEntities.CACTI_SPORE,worldIn);
-        this.setSize(1F, 1F);
         this.experienceValue=30;
         spawnableBlocks= new ArrayList<>();
         spawnableBlocks.add(ModBlocks.KATHAIRIS_GRASS);
+    }
+
+    public EntityCactiSpore(EntityType<? extends LivingEntity> type, World world) {
+        super((EntityType<? extends AnimalEntity>) type, world);
     }
 
     @Override

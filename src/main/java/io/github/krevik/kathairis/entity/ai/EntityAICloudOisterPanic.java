@@ -1,10 +1,8 @@
 package io.github.krevik.kathairis.entity.ai;
 
 import io.github.krevik.kathairis.entity.EntityCloudOister;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 import java.util.EnumSet;
 

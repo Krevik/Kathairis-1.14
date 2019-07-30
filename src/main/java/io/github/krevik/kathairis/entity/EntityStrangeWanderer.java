@@ -8,13 +8,13 @@ import io.github.krevik.kathairis.util.networking.packets.PacketClientOpenGuiOld
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -22,20 +22,24 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class EntityStrangeWanderer extends EntityMob
+public class EntityStrangeWanderer extends MobEntity
 {
     public EntityStrangeWanderer(World worldIn)
     {
         super(ModEntities.STRANGE_WANDERER,worldIn);
-        this.setSize(1F, 2F);
         this.experienceValue=0;
     }
+
+    public EntityStrangeWanderer(EntityType<EntityStrangeWanderer> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-            if(source.getTrueSource() instanceof EntityPlayer) {
-                EntityPlayer attacker = (EntityPlayer) source.getTrueSource();
+            if(source.getTrueSource() instanceof PlayerEntity) {
+                PlayerEntity attacker = (PlayerEntity) source.getTrueSource();
                 Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(attacker.getHeldItemMainhand());
                 if(map.containsKey(KathairisEnchantments.ENCHANTMENT_ETHEREAL)) {
                     this.damageEntity(source, 6);
@@ -73,9 +77,9 @@ public class EntityStrangeWanderer extends EntityMob
     @Override
     public void tick() {
     	super.tick();
-    	EntityPlayer ep = this.world.getClosestPlayer(posX, posY, posZ, 15, true);
+        PlayerEntity ep = this.world.getClosestPlayer(posX, posY, posZ, 15, true);
     	if(ep!=null) {
-            this.getLookHelper().setLookPosition(ep.posX, ep.posY + (double)ep.getEyeHeight(), ep.posZ, (float)100, (float)100);
+            this.getLookController().setLookPosition(ep.posX, ep.posY + (double)ep.getEyeHeight(), ep.posZ, (float)100, (float)100);
     	}
 
     }
@@ -87,10 +91,10 @@ public class EntityStrangeWanderer extends EntityMob
     }
 
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand)
+    public boolean processInteract(PlayerEntity player, Hand hand)
     {
-            if(player instanceof EntityPlayerMP) {
-                PacketHandler.sendTo(new PacketClientOpenGuiOldMan(), (EntityPlayerMP) player);
+            if(player.world.isRemote) {
+                PacketHandler.sendTo(new PacketClientOpenGuiOldMan(), (PlayerEntity) player);
             }
         return super.processInteract(player, hand);
     }

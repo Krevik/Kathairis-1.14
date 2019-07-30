@@ -1,7 +1,9 @@
 package io.github.krevik.kathairis.util.networking.packets;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -26,8 +28,8 @@ public class PacketServerPlayerUseJadeVine  {
         public static void handle(final PacketServerPlayerUseJadeVine message, Supplier<NetworkEvent.Context> ctx)
         {
             ctx.get().enqueueWork(() -> {
-                EntityPlayerMP player = ctx.get().getSender();
-                    ctx.get().getSender().motionY=0.1;
+                PlayerEntity player = ctx.get().getSender();
+                ctx.get().getSender().setMotion(new Vec3d(ctx.get().getSender().getMotion().getX(),0.1,ctx.get().getSender().getMotion().getZ()));
                     ctx.get().getSender().fallDistance=0;
                     ctx.get().getSender().velocityChanged=true;
                 return;

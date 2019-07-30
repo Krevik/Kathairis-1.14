@@ -3,43 +3,28 @@ package io.github.krevik.kathairis.entity;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.SkeletonEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.TippedArrowItem;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -54,11 +39,15 @@ public class EntityGaznowel extends FlyingEntity implements IRangedAttackMob, IM
     public EntityGaznowel(World worldIn)
     {
         super(ModEntities.GAZNOWEL,worldIn);
-        this.setSize(1F, 2.0F);
         this.experienceValue = 35;
         this.moveController = new EntityGaznowel.GaznowelMoveHelper(this);
 
     }
+
+    public EntityGaznowel(EntityType<EntityGaznowel> type, World world) {
+        super(type, world);
+    }
+
 
     public boolean getIsSwingingArms(){
         return getDataManager().get(SWINGING_ARMS).booleanValue();

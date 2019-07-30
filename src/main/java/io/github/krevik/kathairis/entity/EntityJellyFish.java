@@ -5,18 +5,13 @@ import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.init.ModSounds;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWaterFlying;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -25,7 +20,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
@@ -52,6 +46,11 @@ public class EntityJellyFish extends CreatureEntity
         this.moveController = new EntityJellyFish.JellyFishMoveHelper(this);
         this.setNoGravity(true);
     }
+
+    public EntityJellyFish(EntityType<EntityJellyFish> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     protected void registerGoals() {

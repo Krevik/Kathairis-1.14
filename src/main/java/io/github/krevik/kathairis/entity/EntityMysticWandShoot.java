@@ -3,17 +3,17 @@ package io.github.krevik.kathairis.entity;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.init.ModParticles;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.init.Particles;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -29,8 +29,12 @@ public class EntityMysticWandShoot extends Entity {
 
     public EntityMysticWandShoot(World worldIn) {
         super(ModEntities.MYSTIC_WAND_SHOOT, worldIn);
-        setSize(1,1);
     }
+
+    public EntityMysticWandShoot(EntityType<EntityMysticWandShoot> type, World world) {
+        super(type, world);
+    }
+
 
 
     public LivingEntity shootingEntity;
@@ -55,7 +59,7 @@ public class EntityMysticWandShoot extends Entity {
             super.tick();
 
             ++this.ticksInAir;
-            RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.shootingEntity);
+            RayTraceResult raytraceresult = ProjectileHelper.func_221266_a(this, true, this.ticksInAir >= 25, this.shootingEntity, RayTraceContext.BlockMode.COLLIDER);
             if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onImpact(raytraceresult);
             }
@@ -68,7 +72,7 @@ public class EntityMysticWandShoot extends Entity {
             if (this.isInWater()) {
                 for(int i = 0; i < 4; ++i) {
                     float f1 = 0.25F;
-                    this.world.addParticle(Particles.BUBBLE, this.posX - this.getMotion().getX() * 0.25D, this.posY - this.getMotion().getY() * 0.25D, this.posZ - this.getMotion().getZ() * 0.25D, this.getMotion().getX(), this.getMotion().getY(), this.getMotion().getZ());
+                    this.world.addParticle(ParticleTypes.BUBBLE, this.posX - this.getMotion().getX() * 0.25D, this.posY - this.getMotion().getY() * 0.25D, this.posZ - this.getMotion().getZ() * 0.25D, this.getMotion().getX(), this.getMotion().getY(), this.getMotion().getZ());
                 }
 
                 f = 0.8F;
@@ -137,6 +141,11 @@ public class EntityMysticWandShoot extends Entity {
     @Override
     public float getCollisionBorderSize() {
         return 1.0F;
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return null;
     }
 
     @Override

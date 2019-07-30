@@ -2,6 +2,7 @@ package io.github.krevik.kathairis.util;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import java.util.ArrayList;
 import java.util.Random;

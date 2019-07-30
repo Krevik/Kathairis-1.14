@@ -2,36 +2,26 @@ package io.github.krevik.kathairis.entity;
 
 import com.google.common.collect.Sets;
 import io.github.krevik.kathairis.entity.ai.EntityAIAttackTarget;
-import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.init.ModItems;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -52,11 +42,15 @@ public class EntityCloudySlime extends TameableEntity
     public EntityCloudySlime(World worldIn)
     {
         super(ModEntities.CLOUDY_SLIME,worldIn);
-        this.setSize(1.4F, 1.4F);
 
         this.moveController = new FlyingMovementController(this);
         this.setTamed(false);
     }
+
+    public EntityCloudySlime(EntityType<EntityCloudySlime> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     protected void registerGoals() {
@@ -99,13 +93,13 @@ public class EntityCloudySlime extends TameableEntity
     }
 
     @Override
-    public void travel(float strafe, float vertical, float forward) {
+    public void travel(Vec3d direction) {
         if (this.isInWater()) {
-            this.moveRelative(0.02f,new Vec3d(strafe, vertical, forward));
+            this.moveRelative(0.02f,new Vec3d(direction.getX(), direction.getY(), direction.getZ()));
             this.move(MoverType.SELF, getMotion());
             setMotionMultiplier(Blocks.WATER.getDefaultState(),new Vec3d(0.8,0.8,0.8));
         } else if (this.isInLava()) {
-            this.moveRelative(0.02f,new Vec3d(strafe, vertical, forward));
+            this.moveRelative(0.02f,new Vec3d(direction.getX(), direction.getY(), direction.getZ()));
             this.move(MoverType.SELF, getMotion());
             setMotionMultiplier(Blocks.LAVA.getDefaultState(),new Vec3d(0.5,0.5,0.5));
         } else {
@@ -116,7 +110,7 @@ public class EntityCloudySlime extends TameableEntity
             }
 
             float f1 = 0.16277137F / (f * f * f);
-            this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, new Vec3d(strafe, vertical, forward));
+            this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, new Vec3d(direction.getX(), direction.getY(), direction.getZ()));
             f = 0.91F;
             if (this.onGround) {
                 BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ));

@@ -2,17 +2,13 @@ package io.github.krevik.kathairis.entity;
 
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
-import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -23,7 +19,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 
@@ -42,11 +37,15 @@ public class EntityFlyingSquid extends FlyingEntity
     public EntityFlyingSquid(World worldIn)
     {
         super(ModEntities.FLYING_SQUID,worldIn);
-        this.setSize(1.5F, 2F);
         this.getDataManager().set(isHoldingPlayer, Boolean.valueOf(false));
         this.getDataManager().set(canHoldPlayer, Boolean.valueOf(true));
 
     }
+
+    public EntityFlyingSquid(EntityType<EntityFlyingSquid> type, World world) {
+        super(type, world);
+    }
+
 
     @Override
     protected void registerData()

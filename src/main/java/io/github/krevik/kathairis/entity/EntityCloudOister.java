@@ -8,24 +8,19 @@ import io.github.krevik.kathairis.init.ModItems;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.AmbientEntity;
-import net.minecraft.entity.passive.EntityAmbientCreature;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Particles;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -60,10 +55,12 @@ public class EntityCloudOister extends AmbientEntity
     public EntityCloudOister(World worldIn)
     {
         super(ModEntities.CLOUD_OISTER,worldIn);
-        this.setSize(0.6F, 0.6F);
         this.experienceValue=5;
         this.setTimeUntilNextPearl(this.rand.nextInt(6000) + 6000);
         this.setPanic(false);
+    }
+    public EntityCloudOister(EntityType<EntityCloudOister> type, World world) {
+        super(type, world);
     }
 
     @Override
@@ -152,8 +149,7 @@ public class EntityCloudOister extends AmbientEntity
             double d3 = 0;
             double d4 = 0;
             double d5 = 0;
-
-            world.addParticle(Particles.CLOUD, d0, d1, d2, d3, d4, d5);
+            world.addParticle(ParticleTypes.CLOUD, d0, d1, d2, d3, d4, d5);
         }
     }
 

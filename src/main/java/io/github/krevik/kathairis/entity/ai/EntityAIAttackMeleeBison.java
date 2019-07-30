@@ -1,16 +1,10 @@
 package io.github.krevik.kathairis.entity.ai;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 

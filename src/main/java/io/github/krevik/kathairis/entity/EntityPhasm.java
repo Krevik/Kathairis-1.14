@@ -8,19 +8,11 @@ import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -33,7 +25,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 
@@ -47,11 +38,15 @@ public class EntityPhasm extends FlyingEntity implements IMob {
     public EntityPhasm(World worldIn)
     {
         super(ModEntities.PHASM,worldIn);
-        this.setSize(1F, 2.0F);
         this.experienceValue = 35;
         this.moveController = new EntityPhasm.PhasmMoveHelper(this);
 
     }
+
+    public EntityPhasm(EntityType<EntityPhasm> type, World world) {
+        super(type, world);
+    }
+
 
     public boolean getIsSwingingArms(){
         return getDataManager().get(SWINGING_ARMS).booleanValue();

@@ -4,6 +4,7 @@ import io.github.krevik.kathairis.util.networking.packets.PacketClientOpenGuiOld
 import io.github.krevik.kathairis.util.networking.packets.PacketServerGivePlayerEthereal;
 import io.github.krevik.kathairis.util.networking.packets.PacketServerPlayerUseJadeVine;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -39,7 +40,7 @@ public final class PacketHandler
         HANDLER.sendToServer(msg);
     }
 
-    public static void sendTo(Object msg, EntityPlayerMP player)
+    public static void sendTo(Object msg, PlayerEntity player)
     {
         if (!(player instanceof FakePlayer))
         {
@@ -48,7 +49,7 @@ public final class PacketHandler
     }
 
     public static void sendToAll(Object msg){
-        for (EntityPlayerMP player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers())
+        for (PlayerEntity player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers())
         {
             sendTo(msg,player);
         }

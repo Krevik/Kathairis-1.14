@@ -2,8 +2,6 @@ package io.github.krevik.kathairis.entity.ai;
 
 import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;

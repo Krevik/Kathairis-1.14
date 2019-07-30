@@ -1,15 +1,13 @@
 package io.github.krevik.kathairis.entity;
 
 import io.github.krevik.kathairis.entity.ai.EntityAIHealTargets;
-import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.init.ModEntities;
 import io.github.krevik.kathairis.util.KatharianLootTables;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -25,9 +23,13 @@ public class EntityLivingFlower extends EntityKatharianAnimal
     public EntityLivingFlower(World worldIn)
     {
         super(ModEntities.LIVING_FLOWER,worldIn);
-        this.setSize(0.3F, 0.5F);
         this.experienceValue=10;
     }
+
+    public EntityLivingFlower(EntityType<EntityLivingFlower> type, World world) {
+        super(type, world);
+    }
+
 
     public void deallowDespawning(){
         getDataManager().set(canDespawn,false);
