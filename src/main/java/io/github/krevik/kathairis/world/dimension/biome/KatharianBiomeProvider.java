@@ -34,18 +34,22 @@ public class KatharianBiomeProvider extends BiomeProvider {
         this.biomeFactoryLayer = lvt_4_1_[1];
     }
 
+    @Override
     public Biome getBiome(int p_201545_1_, int p_201545_2_) {
         return this.biomeFactoryLayer.func_215738_a(p_201545_1_, p_201545_2_);
     }
 
+    @Override
     public Biome func_222366_b(int p_222366_1_, int p_222366_2_) {
         return this.genBiomes.func_215738_a(p_222366_1_, p_222366_2_);
     }
 
+    @Override
     public Biome[] getBiomes(int p_201537_1_, int p_201537_2_, int p_201537_3_, int p_201537_4_, boolean p_201537_5_) {
         return this.biomeFactoryLayer.generateBiomes(p_201537_1_, p_201537_2_, p_201537_3_, p_201537_4_);
     }
 
+    @Override
     public Set<Biome> getBiomesInSquare(int p_201538_1_, int p_201538_2_, int p_201538_3_) {
         int lvt_4_1_ = p_201538_1_ - p_201538_3_ >> 2;
         int lvt_5_1_ = p_201538_2_ - p_201538_3_ >> 2;
@@ -59,6 +63,7 @@ public class KatharianBiomeProvider extends BiomeProvider {
     }
 
     @Nullable
+    @Override
     public BlockPos findBiomePosition(int p_180630_1_, int p_180630_2_, int p_180630_3_, List<Biome> p_180630_4_, Random p_180630_5_) {
         int lvt_6_1_ = p_180630_1_ - p_180630_3_ >> 2;
         int lvt_7_1_ = p_180630_2_ - p_180630_3_ >> 2;
@@ -85,6 +90,7 @@ public class KatharianBiomeProvider extends BiomeProvider {
         return lvt_13_1_;
     }
 
+    @Override
     public boolean hasStructure(Structure<?> p_205004_1_) {
         return (Boolean)this.hasStructureCache.computeIfAbsent(p_205004_1_, (p_205006_1_) -> {
             Biome[] var2 = this.biomes;
@@ -101,6 +107,7 @@ public class KatharianBiomeProvider extends BiomeProvider {
         });
     }
 
+    @Override
     public Set<BlockState> getSurfaceBlocks() {
         if (this.topBlocksCache.isEmpty()) {
             Biome[] var1 = this.biomes;

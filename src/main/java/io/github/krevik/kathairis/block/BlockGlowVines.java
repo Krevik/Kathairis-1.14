@@ -19,6 +19,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,7 +42,7 @@ public class BlockGlowVines extends BlockKathairisPlant {
 		setDefaultState(getDefaultState().with(VARIANT, EnumType.TOP).with(FACING, Direction.EAST));
 	}
 
-	public static boolean canPlaceBlockAtStatic(IWorldReader worldIn, BlockPos pos) {
+	public static boolean canPlaceBlockAtStatic(IWorldGenerationReader worldIn, BlockPos pos) {
 		boolean can = false;
 		if (!worldIn.isAirBlock(pos.east()) && worldIn.getBlockState(pos.east()).isSolid()) {
 			can = true;

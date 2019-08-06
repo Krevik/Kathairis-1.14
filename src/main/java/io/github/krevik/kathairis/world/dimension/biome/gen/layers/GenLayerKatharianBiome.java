@@ -2,8 +2,8 @@ package io.github.krevik.kathairis.world.dimension.biome.gen.layers;
 
 import com.google.common.collect.ImmutableList;
 import io.github.krevik.kathairis.init.ModBiomes;
-import net.minecraft.util.registry.IRegistry;
-import net.minecraft.world.gen.IContext;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraft.world.gen.layer.traits.IC0Transformer;
 import net.minecraftforge.common.BiomeManager;
@@ -36,29 +36,24 @@ public class GenLayerKatharianBiome implements IC0Transformer {
             if (biomesToAdd != null) biomes[idx].addAll(biomesToAdd);
         }
 
-        //int desertIdx = net.minecraftforge.common.BiomeManager.BiomeType.DESERT.ordinal();
-
-        //biomes[desertIdx].add(new net.minecraftforge.common.BiomeManager.BiomeEntry(Biomes.DESERT, 30));
-        //biomes[desertIdx].add(new net.minecraftforge.common.BiomeManager.BiomeEntry(Biomes.SAVANNA, 20));
-        //biomes[desertIdx].add(new net.minecraftforge.common.BiomeManager.BiomeEntry(Biomes.PLAINS, 10));
-
             this.settings = p_i48641_2_;
 
     }
 
 
-    public int apply(IContext context, int value) {
+    protected net.minecraftforge.common.BiomeManager.BiomeEntry getWeightedBiomeEntry(net.minecraftforge.common.BiomeManager.BiomeType type, INoiseRandom iNoiseRandom) {
+        java.util.List<BiomeManager.BiomeEntry> biomeList = getBiomesToGeneration();
+        int totalWeight = net.minecraft.util.WeightedRandom.getTotalWeight(biomeList);
+        int weight = net.minecraftforge.common.BiomeManager.isTypeListModded(type)?iNoiseRandom.random(totalWeight):iNoiseRandom.random(totalWeight / 10) * 10;
+        return (net.minecraftforge.common.BiomeManager.BiomeEntry)net.minecraft.util.WeightedRandom.getRandomItem(biomeList, weight);
+    }
+
+    @Override
+    public int apply(INoiseRandom iNoiseRandom, int i) {
         if (this.settings != null && this.settings.getBiomeId() >= 0) {
             return this.settings.getBiomeId();
         } else {
-            return IRegistry.BIOME.getId(getWeightedBiomeEntry(net.minecraftforge.common.BiomeManager.BiomeType.COOL, context).biome);
+            return Registry.BIOME.getId(getWeightedBiomeEntry(net.minecraftforge.common.BiomeManager.BiomeType.COOL, iNoiseRandom).biome);
         }
-    }
-
-    protected net.minecraftforge.common.BiomeManager.BiomeEntry getWeightedBiomeEntry(net.minecraftforge.common.BiomeManager.BiomeType type, IContext context) {
-        java.util.List<BiomeManager.BiomeEntry> biomeList = getBiomesToGeneration();
-        int totalWeight = net.minecraft.util.WeightedRandom.getTotalWeight(biomeList);
-        int weight = net.minecraftforge.common.BiomeManager.isTypeListModded(type)?context.random(totalWeight):context.random(totalWeight / 10) * 10;
-        return (net.minecraftforge.common.BiomeManager.BiomeEntry)net.minecraft.util.WeightedRandom.getRandomItem(biomeList, weight);
     }
 }
