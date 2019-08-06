@@ -3,18 +3,16 @@ package io.github.krevik.kathairis.world.dimension.feature;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import io.github.krevik.kathairis.init.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.pattern.BlockMatcher;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class KatharianMinableConfig implements IFeatureConfig {
     public final FillerBlockType target;

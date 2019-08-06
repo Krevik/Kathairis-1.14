@@ -1,18 +1,18 @@
 package io.github.krevik.kathairis.world.dimension.feature;
 
 import com.mojang.datafixers.Dynamic;
-import java.util.BitSet;
-import java.util.Random;
-import java.util.function.Function;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap.Type;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+
+import java.util.BitSet;
+import java.util.Random;
+import java.util.function.Function;
 
 public class BasicKatharianOreFeature extends Feature<KatharianMinableConfig> {
     public BasicKatharianOreFeature(Function<Dynamic<?>, ? extends KatharianMinableConfig> p_i51472_1_) {

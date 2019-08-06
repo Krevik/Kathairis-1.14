@@ -1,26 +1,32 @@
 package io.github.krevik.kathairis.world.dimension.feature;
 
+import com.mojang.datafixers.Dynamic;
 import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.util.RewardHelper;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.IChunkGenSettings;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Function;
 
 public class FeatureKatharianFloatingMiniIsland extends Feature<NoFeatureConfig> {
+    public FeatureKatharianFloatingMiniIsland(Function<Dynamic<?>, ? extends NoFeatureConfig> p_i49878_1_) {
+        super(p_i49878_1_);
+    }
+
     @Override
-    public boolean place(IWorld world, IChunkGenerator<? extends IChunkGenSettings> c, Random rand, BlockPos pos, NoFeatureConfig p_212245_5_) {
+    public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> c, Random rand, BlockPos pos, NoFeatureConfig p_212245_5_) {
       if(rand.nextInt(200)==0) {
-          IBlockState cloudState = rand.nextInt(2) == 0 ? ModBlocks.YELLOW_CLOUD.getDefaultState() : ModBlocks.BLUE_CLOUD.getDefaultState();
+          BlockState cloudState = rand.nextInt(2) == 0 ? ModBlocks.YELLOW_CLOUD.getDefaultState() : ModBlocks.BLUE_CLOUD.getDefaultState();
           int height = 150 + rand.nextInt(25) + rand.nextInt(25) + rand.nextInt(25) + rand.nextInt(25);
           int startRadius = 3 + rand.nextInt(6);
           int radius = startRadius;
@@ -49,7 +55,7 @@ public class FeatureKatharianFloatingMiniIsland extends Feature<NoFeatureConfig>
                       if (rand.nextInt(30) == 0) {
                           world.setBlockState(upperPos, Blocks.CHEST.getDefaultState(), 2);
                           ArrayList<ItemStack> rewards = RewardHelper.getFloatingMiniIslandRewards(rand);
-                          TileEntityChest chest = (TileEntityChest) world.getTileEntity(upperPos);
+                          ChestTileEntity chest = (ChestTileEntity) world.getTileEntity(upperPos);
                           if (chest != null) {
                               for (int cc = 0; cc < rewards.size(); cc++) {
                                   chest.setInventorySlotContents(rand.nextInt(16), rewards.get(cc));
@@ -65,7 +71,7 @@ public class FeatureKatharianFloatingMiniIsland extends Feature<NoFeatureConfig>
     }
 
 
-    private void doCircle(IWorld world, BlockPos pos, int radius, IBlockState cloudState){
+    private void doCircle(IWorld world, BlockPos pos, int radius, BlockState cloudState){
         int posX=pos.getX();
         int posY=pos.getY();
         int posZ=pos.getZ();
