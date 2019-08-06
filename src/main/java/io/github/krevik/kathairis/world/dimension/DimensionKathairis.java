@@ -7,15 +7,14 @@ import io.github.krevik.kathairis.init.ModBiomes;
 import io.github.krevik.kathairis.init.ModBlocks;
 import io.github.krevik.kathairis.world.dimension.biome.KatharianBiomeProvider;
 import io.github.krevik.kathairis.world.dimension.biome.KatharianBiomeProviderSettings;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.biome.provider.BiomeProviderType;
@@ -35,24 +34,24 @@ import java.util.ArrayList;
 public class DimensionKathairis extends OverworldDimension {
 
 
-    public DimensionKathairis() {
-        super(Kathairis.KATH_DIM_TYPE);
+    public DimensionKathairis(World world) {
+        super(world,Kathairis.KATH_DIM_TYPE);
     }
 
-    public DimensionKathairis(DimensionType dimensionType) {
-        super(dimensionType);
+    public DimensionKathairis(World world, DimensionType dimensionType) {
+        super(world, dimensionType);
     }
 
     @Override
     public ChunkGenerator<? extends GenerationSettings> createChunkGenerator() {
         WorldType worldtype = this.world.getWorldInfo().getGenerator();
-        BiomeProviderType<KatharianBiomeProviderSettings, KatharianBiomeProvider> biomeprovidertype1 = new BiomeProviderType<>(KatharianBiomeProvider::new,KatharianBiomeProviderSettings::new,new ResourceLocation("kathairis","katharian_biome_provider_type"));
+        BiomeProviderType<KatharianBiomeProviderSettings, KatharianBiomeProvider> biomeprovidertype1 = new BiomeProviderType<>(KatharianBiomeProvider::new,KatharianBiomeProviderSettings::new);
         KatharianBiomeProviderSettings overworldbiomeprovidersettings1 = biomeprovidertype1.createSettings().setGeneratorSettings(new KathairisGenSettings()).setWorldInfo(this.world.getWorldInfo());
         BiomeProvider biomeprovider = biomeprovidertype1.create(overworldbiomeprovidersettings1);
 
-        ChunkGeneratorType<OverworldGenSettings, ChunkGeneratorKathairis> chunkgeneratortype4 = new ChunkGeneratorType<>(ChunkGeneratorKathairis::new,true,KathairisGenSettings::new,new ResourceLocation("kathairis","kathairis_chunk_generator"));
+        ChunkGeneratorType<OverworldGenSettings, ChunkGeneratorKathairis> chunkgeneratortype4 = new ChunkGeneratorType<>(ChunkGeneratorKathairis::new,true,KathairisGenSettings::new);
         OverworldGenSettings overworldgensettings1 = chunkgeneratortype4.createSettings();
-        overworldgensettings1.setDefautBlock(ModBlocks.KATHAIRIS_STONE.getDefaultState());
+        overworldgensettings1.setDefaultBlock(ModBlocks.KATHAIRIS_STONE.getDefaultState());
         overworldgensettings1.setDefaultFluid(Blocks.WATER.getDefaultState());
         return chunkgeneratortype4.create(this.world, biomeprovider, overworldgensettings1);
     }
@@ -72,27 +71,27 @@ public class DimensionKathairis extends OverworldDimension {
     Vec3d swampColor = new Vec3d(14/10,51/10,12/10);
 
     @Override
-    public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
+    public Vec3d getSkyColor(BlockPos cameraPosition, float partialTicks) {
         int radius=6;
         ArrayList<BlockPos> posesToCalculate = new ArrayList<>();
         for(int x=-radius;x<=radius;x++){
             for(int z=-radius;z<=radius;z++){
-                BlockPos pos = new BlockPos(cameraEntity.getPosition().getX()+x,cameraEntity.getPosition().getY(),cameraEntity.getPosition().getZ()+z);
+                BlockPos pos = new BlockPos(cameraPosition.getX()+x,cameraPosition.getY(),cameraPosition.getZ()+z);
                 posesToCalculate.add(pos);
             }
         }
         boolean isSwampNear=false;
         for(BlockPos pos:posesToCalculate){
-            if(cameraEntity.world.getBiome(pos)==ModBiomes.KATHARIAN_SWAMP){
+            if(Minecraft.getInstance().player.world.getBiome(pos)==ModBiomes.KATHARIAN_SWAMP){
                 isSwampNear=true;
             }
         }
         if(isSwampNear){
-            Vec3d normalColor = super.getSkyColor(cameraEntity,partialTicks);
+            Vec3d normalColor = super.getSkyColor(cameraPosition,partialTicks);
             return getAverageColor(getWorld(),posesToCalculate,normalColor,swampColor);
 
         }
-        return super.getSkyColor(cameraEntity,partialTicks);
+        return super.getSkyColor(cameraPosition,partialTicks);
     }
 
     @Override

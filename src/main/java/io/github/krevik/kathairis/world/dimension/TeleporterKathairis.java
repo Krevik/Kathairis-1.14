@@ -9,6 +9,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -150,9 +151,9 @@ public class TeleporterKathairis extends Teleporter {
 			double d4 = entityIn.getMotion().z;
 			entityIn.setMotion(new Vec3d(d3 * (double) f + d4 * (double) f3,entityIn.getMotion().getY(),d3 * (double) f2 + d4 * (double) f1));
 			entityIn.rotationYaw = rotationYaw - (float) (entityIn.getTeleportDirection().getOpposite().getHorizontalIndex() * 90) + (float) (blockpattern$patternhelper.getForwards().getHorizontalIndex() * 90);
-			if (entityIn instanceof EntityPlayerMP) {
-				((EntityPlayerMP) entityIn).connection.setPlayerLocation(d5, d6, d7, entityIn.rotationYaw, entityIn.rotationPitch);
-				((EntityPlayerMP) entityIn).connection.captureCurrentPosition();
+			if (entityIn instanceof ServerPlayerEntity) {
+				((ServerPlayerEntity) entityIn).connection.setPlayerLocation(d5, d6, d7, entityIn.rotationYaw, entityIn.rotationPitch);
+				((ServerPlayerEntity) entityIn).connection.captureCurrentPosition();
 			} else {
 				entityIn.setLocationAndAngles(d5, d6, d7, entityIn.rotationYaw, entityIn.rotationPitch);
 			}
@@ -321,9 +322,10 @@ public class TeleporterKathairis extends Teleporter {
 		return true;
 	}
 
+
 	@Override
 	public void placeEntity(World world, Entity entity, float yaw) {
-		if (entity instanceof EntityPlayerMP)
+		if (entity instanceof ServerPlayerEntity)
 			placeInPortal(entity, yaw);
 		else
 			placeInExistingPortal(entity, yaw);
